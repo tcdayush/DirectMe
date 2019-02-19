@@ -48,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
         sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Signed In Successfully", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, Preferences.class);
+                startActivity(intent);
             }
         });
     }
