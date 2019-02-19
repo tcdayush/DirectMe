@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Direct Me</string>
+
+    <string name="signin">Sign In Using Google</string>
+    <string name="new_user">New User? Sign Up Here!!!</string>
+
+    <string name="enter_name">Enter Your Name</string>
+    <string name="enter_email">Enter Your E-Mail</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">Register</string>
+    <string name="title_activity_maps">Map</string>
+
+
+</resources>
