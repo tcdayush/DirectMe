@@ -3,6 +3,7 @@ package com.example.directme;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,12 +19,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -71,12 +75,13 @@ public class Preferences extends Activity {
                      Writer output = new BufferedWriter(new FileWriter(file));
                      output.write(jsonObject.toString());
                      output.close();
-                     //Toast.makeText(getApplicationContext(), "Preferences saved" , Toast.LENGTH_LONG).show();
-                     //Toast.makeText(getApplicationContext(), jsonObject.toString() , Toast.LENGTH_LONG).show();
 
-                     postJSONToServer(jsonObject);
+                     Toast.makeText(getApplicationContext(), "Preferences saved" , Toast.LENGTH_LONG).show();
+
+                     new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
+
                      Intent intent = new Intent(Preferences.this, MapsActivity.class);
-                     //startActivity(intent);
+                     startActivity(intent);
 
                  } catch (Exception e) {
                      Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -87,58 +92,7 @@ public class Preferences extends Activity {
 
     }
 
-    public void postJSONToServer(JSONObject  jsonObject)
-    {
-        OutputStream os;
-        InputStream is;
-        HttpURLConnection conn;
 
-        try {
-            //constants
-            URL url = new URL("http://10.6.57.183:9090/pref");
-            String message = jsonObject.toString();
-
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout( 10000 /*milliseconds*/ );
-            conn.setConnectTimeout( 15000 /* milliseconds */ );
-            conn.setRequestMethod("POST");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-            conn.setFixedLengthStreamingMode(message.getBytes().length);
-
-            //make some HTTP header nicety
-            conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
-            conn.setRequestProperty("X-Requested-With", "XMLHttpRequest");
-
-            //open
-            conn.connect();
-
-            //setup send
-            os = new BufferedOutputStream(conn.getOutputStream());
-            os.write(message.getBytes());
-            //clean up
-            os.flush();
-
-            //do something with response
-            is = conn.getInputStream();
-
-            Toast.makeText(getApplicationContext(), "Sent Request" , Toast.LENGTH_LONG).show();
-
-            os.close();
-            is.close();
-            conn.disconnect();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            //clean up
-
-
-        }
-    }
 
     public JSONObject makeJSONObject(Boolean pollutionAvoidance, Boolean weather, Boolean reliability, Boolean comfort, Boolean trafficAvoidance)
     {
@@ -154,6 +108,7 @@ public class Preferences extends Activity {
         }
         return obj;
     }
+
 
 
 
