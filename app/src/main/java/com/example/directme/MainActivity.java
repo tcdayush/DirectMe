@@ -1,6 +1,6 @@
 package com.example.directme;
 
-import android.content.Context;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         // Build a GoogleSignInClient with the options specified by gso.
         final GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        //Write Code to Check if other login is already successful, directly jump to preferences page
+
         //listener to the sign up text
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,10 +85,11 @@ public class MainActivity extends AppCompatActivity {
                             Uri personPhoto = acct.getPhotoUrl();
 
                             Toast.makeText(getApplicationContext(),personName,Toast.LENGTH_LONG).show();
-
+                            Intent intent = new Intent(MainActivity.this, Preferences.class);
+                            startActivity(intent);
                         }
                         break;
-                    // ...
+
                 }
             }
         });
@@ -110,8 +113,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI(GoogleSignInAccount account) {
-        // If account returns null -> Show SIgn in Page
         // If account returns value, continue with next activity
+        if(account!=null)
+        {
+            Intent intent = new Intent(MainActivity.this, Preferences.class);
+            startActivity(intent);
+        }
+        // If account returns null -> Show SIgn in Page
+        if(account==null)
+        {
+            Toast.makeText(getApplicationContext(),"Please Login",Toast.LENGTH_LONG).show();
+        }
+
+
     }
 
     @Override

@@ -22,7 +22,7 @@ public class Preferences extends Activity {
          savePreferences.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-                 Intent intent = new Intent(Preferences.this, Test1.class);
+                 Intent intent = new Intent(Preferences.this, MainActivity.class);
                  startActivity(intent);
              }
          });
