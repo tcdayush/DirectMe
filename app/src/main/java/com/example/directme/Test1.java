@@ -9,14 +9,13 @@ import android.widget.TextView;
 public class Test1 extends Activity {
 
     public static TextView response;
-    Button click;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test1);
         response = (findViewById(R.id.response));
-        click = (findViewById(R.id.click));
+        Button click = (findViewById(R.id.click));
 
         click.setOnClickListener(new View.OnClickListener() {
             @Override

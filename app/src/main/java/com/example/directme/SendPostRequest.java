@@ -1,6 +1,8 @@
 package com.example.directme;
 
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -8,8 +10,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class SendPostRequest extends AsyncTask<String, Void, String> {
+class SendPostRequest extends AsyncTask<String, Void, String> {
     
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public String doInBackground(String... params) {
 
@@ -28,15 +31,18 @@ public class SendPostRequest extends AsyncTask<String, Void, String> {
             outputStream.flush();
             outputStream.close();
 
-            InputStream in = httpConnection.getInputStream();
-            InputStreamReader inputStreamReader = new InputStreamReader(in);
-
+            InputStreamReader inputStreamReader;
+            try (InputStream in = httpConnection.getInputStream()) {
+                inputStreamReader = new InputStreamReader(in);
+            }
+            StringBuilder sb = new StringBuilder();
             int inputStreamData = inputStreamReader.read();
             while (inputStreamData != -1) {
                 char currentData = (char) inputStreamData;
                 inputStreamData = inputStreamReader.read();
-                postData += currentData;
+                sb.append(currentData);
             }
+            postData = sb.toString();
             httpConnection.disconnect();
         } catch (Exception e) {
             e.printStackTrace();

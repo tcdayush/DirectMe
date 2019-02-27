@@ -1,6 +1,9 @@
 package com.example.directme;
 
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.text.TextUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,17 +12,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
-public class FetchData extends AsyncTask<Void, Void, Void> {
+class FetchData extends AsyncTask<Void, Void, Void> {
 
-    String data;
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-    }
+    private String data;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected Void doInBackground(Void... voids) {
 
@@ -29,11 +30,13 @@ public class FetchData extends AsyncTask<Void, Void, Void> {
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             InputStream inputStream = httpURLConnection.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            String line = "";
-            while (line != null){
-                line = bufferedReader.readLine();
-                data = data + line;
+            AtomicReference<String> line = null;
+            StringBuilder sb = new StringBuilder();
+            while (TextUtils.isEmpty(Objects.requireNonNull(line).get())){
+                line.set(bufferedReader.readLine());
+                sb.append(line.get());
             }
+            data = sb.toString();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {

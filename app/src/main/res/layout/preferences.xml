@@ -17,7 +17,7 @@
             android:background="#90D3CFCF"
             android:text="Please Select Your Journey Preferences"
             android:textColor="#000"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"

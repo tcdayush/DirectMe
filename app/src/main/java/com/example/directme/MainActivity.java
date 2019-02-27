@@ -2,7 +2,6 @@ package com.example.directme;
 
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,21 +25,17 @@ import com.google.android.gms.tasks.Task;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "My Tag" ;
-    ImageView appLogo;
-    TextView appName;
-    Button sign_in;
-    TextView sign_up;
-    final int RC_SIGN_IN = 1;
+    private final int RC_SIGN_IN = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        appLogo = (findViewById(R.id.app_logo));
-        appName = (findViewById(R.id.app_name));
-        sign_in = (findViewById(R.id.sign_in));
-        sign_up = (findViewById(R.id.sign_up_text));
+        ImageView appLogo = (findViewById(R.id.app_logo));
+        TextView appName = (findViewById(R.id.app_name));
+        Button sign_in = (findViewById(R.id.sign_in));
+        TextView sign_up = (findViewById(R.id.sign_up_text));
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -78,11 +73,11 @@ public class MainActivity extends AppCompatActivity {
 
                         if (acct != null) {
                             String personName = acct.getDisplayName();
-                            String personGivenName = acct.getGivenName();
+                            /*String personGivenName = acct.getGivenName();
                             String personFamilyName = acct.getFamilyName();
                             String personEmail = acct.getEmail();
                             String personId = acct.getId();
-                            Uri personPhoto = acct.getPhotoUrl();
+                            Uri personPhoto = acct.getPhotoUrl();*/
 
                             Toast.makeText(getApplicationContext(),personName,Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(MainActivity.this, Preferences.class);
