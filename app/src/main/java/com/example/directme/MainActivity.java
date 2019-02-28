@@ -18,6 +18,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
+
 /**
  * Launcher Activity: This activity will launch whenever the app starts
  */
@@ -32,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ImageView appLogo = (findViewById(R.id.app_logo));
-        TextView appName = (findViewById(R.id.app_name));
         Button sign_in = (findViewById(R.id.sign_in));
         TextView sign_up = (findViewById(R.id.sign_up_text));
 
@@ -45,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Build a GoogleSignInClient with the options specified by gso.
         final GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        //Write Code to Check if other login is already successful, directly jump to preferences page
 
         //listener to the sign up text
         sign_up.setOnClickListener(new View.OnClickListener() {
@@ -69,21 +73,19 @@ public class MainActivity extends AppCompatActivity {
                         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                         startActivityForResult(signInIntent, RC_SIGN_IN);
 
-                        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
-
-                        if (acct != null) {
+                        /*if (acct != null) {
                             String personName = acct.getDisplayName();
-                            /*String personGivenName = acct.getGivenName();
+                            *//*String personGivenName = acct.getGivenName();
                             String personFamilyName = acct.getFamilyName();
                             String personEmail = acct.getEmail();
                             String personId = acct.getId();
-                            Uri personPhoto = acct.getPhotoUrl();*/
+                            Uri personPhoto = acct.getPhotoUrl();*//*
 
                             Toast.makeText(getApplicationContext(),personName,Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(MainActivity.this, Preferences.class);
                             startActivity(intent);
                         }
-                        break;
+                        break;*/
 
                 }
             }
@@ -93,9 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
-
-
 
     @Override
     protected void onStart()
@@ -107,17 +106,46 @@ public class MainActivity extends AppCompatActivity {
         updateUI(account);
     }
 
+    protected void pushUserDetailsToServer(GoogleSignInAccount account,File file)
+    {
+        try
+        {
+        String personId = account.getId();
+        String personName = account.getGivenName();
+        String personMail = account.getEmail();
+
+        MainActivity mainActivity = new MainActivity();
+        JSONObject  jsonObject = mainActivity.makeJSONObject(personId,personName, personMail);
+
+
+        Writer output = new BufferedWriter(new FileWriter(file));
+        output.write(jsonObject.toString());
+        output.close();
+        new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
+
+        }catch (Exception e)
+        {
+            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+    }
+
     private void updateUI(GoogleSignInAccount account) {
         // If account returns value, continue with next activity
         if(account!=null)
         {
+            File directory = getFilesDir();
+            File file = new File(directory,"Userdata_" + account.getId() + ".json");
+            if(file.exists()==false) {
+                pushUserDetailsToServer(account,file);
+            }
             Intent intent = new Intent(MainActivity.this, Preferences.class);
             startActivity(intent);
         }
-        // If account returns null -> Show SIgn in Page
+        // If account returns null -> Show Sign in Page
         if(account==null)
         {
-            Toast.makeText(getApplicationContext(),"Please Login",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Not Signed In. Please Login",Toast.LENGTH_SHORT).show();
         }
 
 
@@ -149,5 +177,16 @@ public class MainActivity extends AppCompatActivity {
             updateUI(null);
         }
     }
-
+    private JSONObject makeJSONObject(String personId, String personName, String personMail)
+    {
+        JSONObject obj = new JSONObject() ;
+        try {
+            obj.put("personId", personId);
+            obj.put("personName", personName);
+            obj.put("personMail", personMail);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return obj;
+    }
 }

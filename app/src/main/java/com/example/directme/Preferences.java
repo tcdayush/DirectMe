@@ -33,8 +33,6 @@ public class Preferences extends Activity {
     private CheckBox comfort;
     private CheckBox trafficAvoidance;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +59,8 @@ public class Preferences extends Activity {
              @Override
              public void onClick(View v) {
 
-                 Preferences obj = new Preferences();
-                 JSONObject  jsonObject = obj.makeJSONObject(pollutionAvoidance.isChecked(),weather.isChecked(),reliability.isChecked(),comfort.isChecked(),trafficAvoidance.isChecked());
+                 //Preferences obj = new Preferences();
+                 JSONObject  jsonObject = makeJSONObject(pollutionAvoidance.isChecked(),weather.isChecked(),reliability.isChecked(),comfort.isChecked(),trafficAvoidance.isChecked());
 
 
 
@@ -116,8 +114,9 @@ public class Preferences extends Activity {
         return obj;
     }
 
-    /*public void loadPreferences() throws JSONException {
 
+
+    /*public void loadPreferences() throws JSONException {
 
         Toast.makeText(getApplicationContext(), "Test 1" , Toast.LENGTH_LONG).show();
 
