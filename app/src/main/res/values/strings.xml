@@ -9,7 +9,11 @@
     <string name="enter_password">Enter Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="register">Register</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="google_maps_key">AIzaSyBPFLxUS38OVBy6Na5fzroAMBo-Ka8-CKs</string>
 
-
+    <string name="title_activity_maps">Current Place Details</string>
+    <string name="default_info_title">Default Location</string>
+    <string name="default_info_snippet">No places found, because location permission is disabled.</string>
+    <string name="option_get_place">Get place</string>
+    <string name="pick_place">Choose a place</string>
 </resources>

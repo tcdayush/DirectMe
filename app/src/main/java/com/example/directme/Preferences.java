@@ -2,6 +2,7 @@ package com.example.directme;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -83,8 +84,8 @@ public class Preferences extends Activity {
                      new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
                      //Toast.makeText(getApplicationContext(), "Preferences saved in Global DB" , Toast.LENGTH_LONG).show();
 
-                     /*Intent intent = new Intent(Preferences.this, MapsActivity.class);
-                     startActivity(intent);*/
+                     Intent intent = new Intent(Preferences.this, MapsActivity.class);
+                     startActivity(intent);
 
                      /*JSONObject reader = new JSONObject(file.toString());
                      String pollutionAvoidanceValue = reader.getString("pollutionAvoidance");
