@@ -1,0 +1,505 @@
+{
+  "geocoded_waypoints": [
+    {
+      "geocoder_status": "OK",
+      "place_id": "ChIJMSwks5EOZ0gRXbgXe6cvKkE",
+      "types": [
+        "premise"
+      ]
+    },
+    {
+      "geocoder_status": "OK",
+      "place_id": "ChIJ8zDbxJQLZ0gRuVtPLJPifew",
+      "types": [
+        "street_address"
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "bounds": {
+        "northeast": {
+          "lat": 53.3505472,
+          "lng": -6.2573443
+        },
+        "southwest": {
+          "lat": 53.34434820000001,
+          "lng": -6.284856899999999
+        }
+      },
+      "copyrights": "Map data ©2019 Google",
+      "legs": [
+        {
+
+          "arrival_time": {
+            "text": "5:47pm",
+            "time_zone": "Europe/Dublin",
+            "value": 1552326458
+          },
+          "departure_time": {
+            "text": "4:52pm",
+            "time_zone": "Europe/Dublin",
+            "value": 1552323173
+          },
+          "distance": {
+            "text": "9.5 km",
+            "value": 9513
+          },
+          "duration": {
+            "text": "60 mins",
+            "value": 3587
+          },
+          "end_address": "90 Beaufort Downs, Rathfarnham, Dublin 14, D14 AR26, Ireland",
+          "end_location": {
+            "lat": 53.2934853,
+            "lng": -6.2845106
+          },
+          "start_address": "Naughton Institute, South-East Inner City, Dublin, Ireland",
+          "start_location": {
+            "lat": 53.34434820000001,
+            "lng": -6.250400099999999
+          },
+          "steps": [
+            {
+
+              "distance": {
+                "text": "1.1 km",
+                "value": 1124
+              },
+              "duration": {
+                "text": "5 mins",
+                "value": 292
+              },
+              "end_address": "10 Prince's Street North, North City, Dublin, Ireland",
+              "end_location": {
+                "lat": 53.349034,
+                "lng": -6.2603186
+              },
+              "start_address": "Naughton Institute, South-East Inner City, Dublin, Ireland",
+              "start_location": {
+                "lat": 53.34434820000001,
+                "lng": -6.250400099999999
+              },
+              "steps": [
+                {
+                  "distance": {
+                    "text": "0.6 km",
+                    "value": 577
+                  },
+                  "duration": {
+                    "text": "2 mins",
+                    "value": 99
+                  },
+                  "end_location": {
+                    "lat": 53.34748399999999,
+                    "lng": -6.2549987
+                  },
+                  "html_instructions": "Head <b>west</b> on <b>Pearse St</b>/<b>R118</b>/<b>R138</b>/<b>R802</b> toward <b>Mark St</b><div style=\"font-size:0.9em\">Continue to follow R138/R802</div>",
+                  "polyline": {
+                    "points": "eyqdI~wce@c@fDKr@Ej@SlBQ~AQxAi@tFE^M|@APCHCFADCBEDA@C?K?}AI{A@e@?y@CcCU"
+                  },
+                  "start_location": {
+                    "lat": 53.34434820000001,
+                    "lng": -6.250400099999999
+                  },
+                  "travel_mode": "BICYCLING"
+                },
+                {
+                  "distance": {
+                    "text": "0.3 km",
+                    "value": 284
+                  },
+                  "duration": {
+                    "text": "1 min",
+                    "value": 63
+                  },
+                  "end_location": {
+                    "lat": 53.34694409999999,
+                    "lng": -6.2591255
+                  },
+                  "html_instructions": "Turn <b>left</b> onto <b>Burgh Quay</b>/<b>George's Quay</b>/<b>R105</b>/<b>R138</b><div style=\"font-size:0.9em\">Continue to follow Burgh Quay/R105</div>",
+                  "maneuver": "turn-left",
+                  "polyline": {
+                    "points": "wlrdIvtde@A~@AxBBpAHzARzABTB\\DV^lCPxAL`A"
+                  },
+                  "start_location": {
+                    "lat": 53.34748399999999,
+                    "lng": -6.2549987
+                  },
+                  "travel_mode": "BICYCLING"
+                },
+                {
+                  "distance": {
+                    "text": "69 m",
+                    "value": 69
+                  },
+                  "duration": {
+                    "text": "1 min",
+                    "value": 60
+                  },
+                  "end_location": {
+                    "lat": 53.3475346,
+                    "lng": -6.2594322
+                  },
+                  "html_instructions": "Turn <b>right</b> onto <b>O'Connell Bridge</b>",
+                  "maneuver": "turn-right",
+                  "polyline": {
+                    "points": "kirdIpnee@K@C@IBc@R]NMFKF"
+                  },
+                  "start_location": {
+                    "lat": 53.34694409999999,
+                    "lng": -6.2591255
+                  },
+                  "travel_mode": "BICYCLING"
+                },
+                {
+                  "distance": {
+                    "text": "0.2 km",
+                    "value": 175
+                  },
+                  "duration": {
+                    "text": "1 min",
+                    "value": 67
+                  },
+                  "end_location": {
+                    "lat": 53.34906729999999,
+                    "lng": -6.260040699999999
+                  },
+                  "html_instructions": "Continue onto <b>O'Connell Street Lower</b>",
+                  "polyline": {
+                    "points": "amrdIlpee@U@}Br@IBGBG@YLI@mA`@SF"
+                  },
+                  "start_location": {
+                    "lat": 53.3475346,
+                    "lng": -6.2594322
+                  },
+                  "travel_mode": "BICYCLING"
+                },
+                {
+                  "distance": {
+                    "text": "19 m",
+                    "value": 19
+                  },
+                  "duration": {
+                    "text": "1 min",
+                    "value": 3
+                  },
+                  "end_location": {
+                    "lat": 53.349034,
+                    "lng": -6.2603186
+                  },
+                  "html_instructions": "Turn <b>left</b> onto <b>Prince's Street North</b><div style=\"font-size:0.9em\">Destination will be on the left</div>",
+                  "maneuver": "turn-left",
+                  "polyline": {
+                    "points": "uvrdIftee@B\\BX"
+                  },
+                  "start_location": {
+                    "lat": 53.34906729999999,
+                    "lng": -6.260040699999999
+                  },
+                  "travel_mode": "BICYCLING"
+                }
+              ],
+              "traffic_speed_entry": [],
+              "via_waypoint": []
+            },
+            {
+              "distance": {
+                "text": "0.2 km",
+                "value": 200
+              },
+              "duration": {
+                "text": "3 mins",
+                "value": 151
+              },
+              "end_location": {
+                "lat": 53.3505377,
+                "lng": -6.2604538
+              },
+              "html_instructions": "Walk to O'Connell St, Citizens Information",
+              "polyline": {
+                "points": "mvrdI~uee@CYC]kC|@Gm@qBr@[LC?"
+              },
+              "start_location": {
+                "lat": 53.349034,
+                "lng": -6.2603186
+              },
+              "steps": [
+                {
+                  "distance": {
+                    "text": "19 m",
+                    "value": 19
+                  },
+                  "duration": {
+                    "text": "1 min",
+                    "value": 14
+                  },
+                  "end_location": {
+                    "lat": 53.34906729999999,
+                    "lng": -6.260040699999999
+                  },
+                  "html_instructions": "Head <b>east</b> on <b>Prince's Street North</b> toward <b>O'Connell Street Lower</b>",
+                  "polyline": {
+                    "points": "mvrdI~uee@CYC]"
+                  },
+                  "start_location": {
+                    "lat": 53.349034,
+                    "lng": -6.2603186
+                  },
+                  "travel_mode": "WALKING"
+                },
+                {
+                  "distance": {
+                    "text": "81 m",
+                    "value": 81
+                  },
+                  "duration": {
+                    "text": "1 min",
+                    "value": 60
+                  },
+                  "end_location": {
+                    "lat": 53.3497718,
+                    "lng": -6.260351399999999
+                  },
+                  "html_instructions": "Turn <b>left</b> onto <b>O'Connell Street Lower</b>",
+                  "maneuver": "turn-left",
+                  "polyline": {
+                    "points": "uvrdIftee@kC|@"
+                  },
+                  "start_location": {
+                    "lat": 53.34906729999999,
+                    "lng": -6.260040699999999
+                  },
+                  "travel_mode": "WALKING"
+                },
+                {
+                  "distance": {
+                    "text": "16 m",
+                    "value": 16
+                  },
+                  "duration": {
+                    "text": "1 min",
+                    "value": 16
+                  },
+                  "end_location": {
+                    "lat": 53.3498111,
+                    "lng": -6.2601217
+                  },
+                  "html_instructions": "Turn <b>right</b> onto <b>N Earl St</b>",
+                  "maneuver": "turn-right",
+                  "polyline": {
+                    "points": "a{rdIdvee@Gm@"
+                  },
+                  "start_location": {
+                    "lat": 53.3497718,
+                    "lng": -6.260351399999999
+                  },
+                  "travel_mode": "WALKING"
+                },
+                {
+                  "distance": {
+                    "text": "84 m",
+                    "value": 84
+                  },
+                  "duration": {
+                    "text": "1 min",
+                    "value": 61
+                  },
+                  "end_location": {
+                    "lat": 53.3505377,
+                    "lng": -6.2604538
+                  },
+                  "html_instructions": "Turn <b>left</b> onto <b>O'Connell Street Upper</b><div style=\"font-size:0.9em\">Destination will be on the right</div>",
+                  "maneuver": "turn-left",
+                  "polyline": {
+                    "points": "i{rdIvtee@qBr@[LC?"
+                  },
+                  "start_location": {
+                    "lat": 53.3498111,
+                    "lng": -6.2601217
+                  },
+                  "travel_mode": "WALKING"
+                }
+              ],
+              "travel_mode": "WALKING"
+            },
+            {
+              "distance": {
+                "text": "7.9 km",
+                "value": 7880
+              },
+              "duration": {
+                "text": "47 mins",
+                "value": 2849
+              },
+              "end_location": {
+                "lat": 53.292462,
+                "lng": -6.282185
+              },
+              "html_instructions": "Bus towards Ballinteer",
+              "polyline": {
+                "points": "}_sdIlvee@@JB?ZMpBs@|C_A^MRIh@SREDADCB?LEvBaARGNEHIFCz@]JGJERGJGLOJOVe@NWh@_AP[BG@Dr@gANOV@FHbAdEz@rBb@j@pAbALZFZFdBFrG?PBBBfA?h@C^@R@`A@hABzABzA?f@~@?|@Gt@AB?p@?t@FD?HBF@L@RFHD@@\\PJFjBjB^`@|C`@d@NlBVH@v@JD@lAP`CZ\\?r@SZI^Md@MLCt@M~@ObAWj@Gt@Sl@MLC`@GNCV?L?T?H?z@Dp@Bv@@AAJ?j@@tCo@|Ce@HdD?vAB@D~CDxDBxADpB@t@@`@B`A@f@@|@DfBDfCB~@@N@THx@Fn@@X@f@Af@?TAbBApBC`CExAj@C`@AdA?p@FF@d@Dl@@J@R@TBT@@?H@TDXBZF\\FF@ZFHDPHVJHDBBPLb@ZVRPN\\V^XHHfA~@TNhA`A^ZfAx@f@\\TPLHDA@AD?B?B@JFJDNFZJr@Vh@HTDNB^H`APbANB?dCb@D@`AZdBl@F@PHRHZJ`AZD@RDTFL?p@Az@G`AMf@OnAi@^O@?XKXGNCJAz@AR?T@b@BXD^FZH|Ap@HDv@^RLp@`@B@tA|@pAjAFDx@v@l@h@FDJLlAdAn@j@|@z@j@d@b@ZLHVN\\PD@NFVH^JN@H@JAJC\\MDCh@UXIHAJAR@VDt@Rx@LD@d@FB@PBXFb@Jz@XLFzA^`@LJDXHLDB@PDB@v@ZHBXJ\\N`@NVH\\JXHLDNDVFNDF@LBH@`@Fl@HXBl@FbAIHAb@IFAVERE\\Ih@IFAd@KxAY`@GpAUTEZEL?NATAL?P?l@BN?^F\\DJDPDl@Rv@Vn@T`@JRDTBJ?Z@dABnA?lB?j@?~A?v@CFG`@K`AQpBF@?ZFL@B?TFRFXJv@j@HFNJTP\\VXTB@BBNHPJVL\\HB@b@?d@A\\EN@PGNIPKVQJGDGX]FG^q@^s@f@aAt@sA\\o@^s@Te@L[J[Ru@Lo@Jm@BQHm@Fs@@Kt@n@HHRPVp@Rb@N\\HLFFFHHFLJ\\VJD|A\\`ABPBj@F@Y"
+              },
+              "start_location": {
+                "lat": 53.3505472,
+                "lng": -6.2603871
+              },
+              "transit_details": {
+                "arrival_stop": {
+                  "location": {
+                    "lat": 53.292462,
+                    "lng": -6.282185
+                  },
+                  "name": "Rathfarnham, Loretto Convent"
+                },
+                "arrival_time": {
+                  "text": "5:43pm",
+                  "time_zone": "Europe/Dublin",
+                  "value": 1552326192
+                },
+                "departure_stop": {
+                  "location": {
+                    "lat": 53.3505472,
+                    "lng": -6.2603871
+                  },
+                  "name": "O'Connell St, Citizens Information"
+                },
+                "departure_time": {
+                  "text": "4:55pm",
+                  "time_zone": "Europe/Dublin",
+                  "value": 1552323343
+                },
+                "headsign": "Ballinteer",
+                "line": {
+                  "agencies": [
+                    {
+                      "name": "Dublin Bus",
+                      "url": "http://www.transportforireland.ie/"
+                    }
+                  ],
+                  "short_name": "16",
+                  "vehicle": {
+                    "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png",
+                    "name": "Bus",
+                    "type": "BUS"
+                  }
+                },
+                "num_stops": 27
+              },
+              "travel_mode": "TRANSIT"
+            },
+            {
+              "distance": {
+                "text": "0.3 km",
+                "value": 329
+              },
+              "duration": {
+                "text": "4 mins",
+                "value": 243
+              },
+              "end_location": {
+                "lat": 53.2934853,
+                "lng": -6.2845106
+              },
+              "html_instructions": "Walk to 90 Beaufort Downs, Rathfarnham, Dublin 14, D14 AR26, Ireland",
+              "polyline": {
+                "points": "}tgdIl_je@k@GQCaAC}A]KEC~@ALCn@Cr@En@Eb@Kx@G^EPGLHPHPNTPPTRLJ"
+              },
+              "start_location": {
+                "lat": 53.2924709,
+                "lng": -6.282311399999999
+              },
+              "steps": [
+                {
+                  "distance": {
+                    "text": "0.1 km",
+                    "value": 132
+                  },
+                  "duration": {
+                    "text": "2 mins",
+                    "value": 96
+                  },
+                  "end_location": {
+                    "lat": 53.2936426,
+                    "lng": -6.282046299999999
+                  },
+                  "html_instructions": "Head <b>north</b> on <b>Grange Rd</b>/<b>R822</b> toward <b>Dispensary Ln</b>",
+                  "polyline": {
+                    "points": "}tgdIl_je@k@GQCaAC}A]KE"
+                  },
+                  "start_location": {
+                    "lat": 53.2924709,
+                    "lng": -6.282311399999999
+                  },
+                  "travel_mode": "WALKING"
+                },
+                {
+                  "distance": {
+                    "text": "0.1 km",
+                    "value": 134
+                  },
+                  "duration": {
+                    "text": "2 mins",
+                    "value": 99
+                  },
+                  "end_location": {
+                    "lat": 53.2939425,
+                    "lng": -6.2839695
+                  },
+                  "html_instructions": "Turn <b>left</b> onto <b>Beaufort Downs</b>",
+                  "maneuver": "turn-left",
+                  "polyline": {
+                    "points": "g|gdIx}ie@C~@ALCn@Cr@En@Eb@Kx@G^EPGL"
+                  },
+                  "start_location": {
+                    "lat": 53.2936426,
+                    "lng": -6.282046299999999
+                  },
+                  "travel_mode": "WALKING"
+                },
+                {
+                  "distance": {
+                    "text": "63 m",
+                    "value": 63
+                  },
+                  "duration": {
+                    "text": "1 min",
+                    "value": 48
+                  },
+                  "end_location": {
+                    "lat": 53.2934853,
+                    "lng": -6.2845106
+                  },
+                  "html_instructions": "Turn <b>left</b> to stay on <b>Beaufort Downs</b>",
+                  "maneuver": "turn-left",
+                  "polyline": {
+                    "points": "c~gdIxije@HPHPNTPPTRLJ"
+                  },
+                  "start_location": {
+                    "lat": 53.2939425,
+                    "lng": -6.2839695
+                  },
+                  "travel_mode": "WALKING"
+                }
+              ],
+              "travel_mode": "WALKING"
+            }
+          ],
+
+          "traffic_speed_entry": [],
+          "via_waypoint": []
+        }
+      ],
+      "overview_polyline": {
+        "points": "mvrdI~uee@Gw@kC|@Gm@mC`AC?AK@JB?lCaA|DmA|@]b@KdCgAb@MPMfAe@^MXW|AmCTc@@Dr@gANOV@FHbAdEz@rBb@j@pAbALZFZFdBFdHFjAChAHzFBbC|BGx@Ap@?t@FNBTB|@`@vBrB^`@|C`@d@NlBV`ALrAR`CZ\\?nA]dA[bAQ~@ObAWj@Gt@Sz@Qp@Kd@?lCHt@?v@@tCo@|Ce@HdD?vAB@D~CHrGLjGNtIDnAJnAHhA?nAGlJExAj@CfBAlCPjAHz@J|AX|@`@pA`A`HxFrCrBPCj@VnAb@~@Nn@LdC`@hCb@fA\\rCbAvBn@b@Fp@Az@G`AMf@OnBy@ZKh@KfACh@@|@Hz@PfBv@jAl@t@b@tA|@pAjA`A|@t@n@fEzDnA`Ad@XjAd@n@LT?h@Qn@Yb@K^?lAX~@NtAT~Ad@hBf@fA\\f@NxBz@pBn@dAX`ANfALl@FbAIl@K^GbB[rFcAnAMb@A~@Bn@Fh@JfDfAt@P`@B`BD|D?jC?v@CFGbB]rBFbAPl@R`Ar@|AjAh@Zt@Vf@@bAGN@PG`@Ub@Y^e@f@y@zCyFt@yAXw@`@eBN_APaB@Kt@n@\\Zj@tAXj@NPVRh@\\|A\\`AB|@J@YAX}@KaAC}A]KEC~@E|@IbBQ|AMp@GLHPXf@t@p@"
+      },
+      "summary": "",
+      "warnings": [
+        "Walking directions are in beta.    Use caution – This route may be missing sidewalks or pedestrian paths."
+      ],
+      "waypoint_order": []
+    }
+  ],
+  "status": "OK"
+}
+

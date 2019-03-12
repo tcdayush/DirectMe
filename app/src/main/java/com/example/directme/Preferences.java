@@ -84,7 +84,8 @@ public class Preferences extends Activity {
                      new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
                      //Toast.makeText(getApplicationContext(), "Preferences saved in Global DB" , Toast.LENGTH_LONG).show();
 
-                     Intent intent = new Intent(Preferences.this, MapsActivity.class);
+                     //Intent intent = new Intent(Preferences.this, MapsActivity.class);
+                     Intent intent = new Intent(Preferences.this, Routes.class);
                      startActivity(intent);
 
                      /*JSONObject reader = new JSONObject(file.toString());
