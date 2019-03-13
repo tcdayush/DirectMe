@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -42,6 +43,9 @@ import com.google.android.gms.tasks.Task;
      */
     @SuppressLint("All")
     public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+
+        EditText input_source;
+        EditText input_destination;
 
         private static final String TAG = MapsActivity.class.getSimpleName();
         private GoogleMap mMap;
@@ -88,6 +92,9 @@ import com.google.android.gms.tasks.Task;
 
             // Retrieve the content view that renders the map.
             setContentView(R.layout.activity_maps);
+
+            input_destination = findViewById(R.id.input_destination);
+            input_source = findViewById(R.id.input_source);
 
             // Construct a GeoDataClient.
             mGeoDataClient = Places.getGeoDataClient(this);
