@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
             if(file.exists()==false) {
                 pushUserDetailsToServer(account,file);
             }
-            Intent intent = new Intent(MainActivity.this, Preferences.class);
+            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
             startActivity(intent);
         }
         // If account returns null -> Show Sign in Page
