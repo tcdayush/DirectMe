@@ -7,15 +7,22 @@
     android:orientation="vertical"
     >
 
+    <fragment
+        android:id="@+id/place_autocomplete_fragment"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/input_source"
+        android:autofillHints="true"
         android:hint="Enter Source"
         android:inputType="text"
         android:layout_margin="10dp"
         android:gravity="center_vertical|top"
-        />
+        tools:ignore="UnusedAttribute" />
 
     <EditText
         android:layout_width="match_parent"

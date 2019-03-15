@@ -54,6 +54,7 @@ import com.google.android.gms.tasks.Task;
         String inputSourceString;
         String inputDestinationString;
 
+        Marker marker;
         private static final String TAG = MapsActivity.class.getSimpleName();
         private GoogleMap mMap;
         public CameraPosition mCameraPosition;
@@ -201,6 +202,8 @@ import com.google.android.gms.tasks.Task;
         public void onMapReady(GoogleMap map) {
             mMap = map;
 
+
+
             // Use a custom info window adapter to handle multiple lines of text in the
             // info window contents.
             mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
@@ -258,6 +261,11 @@ import com.google.android.gms.tasks.Task;
                                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                             new LatLng(mLastKnownLocation.getLatitude(),
                                                     mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                    /* TODO: Adding Marker at destination
+                                    LatLng currentLocation = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
+                                    marker = mMap.addMarker(new MarkerOptions()
+                                            .position(currentLocation)
+                                            .draggable(true));*/
                                 }
                             } else {
                                 Log.d(TAG, "Current location is null. Using defaults.");
