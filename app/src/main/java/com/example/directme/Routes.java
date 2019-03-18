@@ -2,6 +2,7 @@ package com.example.directme;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +17,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Routes extends Activity {
 
@@ -26,7 +30,7 @@ public class Routes extends Activity {
         setContentView(R.layout.routes);
 
         TextView textView = findViewById(R.id.response);
-        textView.setText("ABC");
+        textView.setText(R.string.routes_setTextViewText);
         ListView listView = findViewById(R.id.listView);
 
         ArrayList<String> stringArrayList = new ArrayList<>();
@@ -72,14 +76,17 @@ public class Routes extends Activity {
     }
 
     public String readJSONFromAsset() {
-        String json;
+        String json = null;
         try {
             InputStream is = getAssets().open("sampleCombinedRoutes.json");
             int size = is.available();
             byte[] buffer = new byte[size];
+            //noinspection ResultOfMethodCallIgnored
             is.read(buffer);
             is.close();
-            json = new String(buffer, "UTF-8");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                json = new String(buffer, UTF_8);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
