@@ -196,28 +196,16 @@ import java.util.Objects;
                 }
             });
 
-            /*buttonSearch.setOnClickListener(new View.OnClickListener() {
+            buttonSearch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     //TODO: Send the Preferencs and Location details to Server
-                    sourceAutocompleteFragment.getText();
-
-                    inputDestinationString = inputDestination.getText().toString().trim();
-
-                    if(inputSourceString.isEmpty()|| inputDestinationString.isEmpty())
-                    {
-                        Toast.makeText(getApplicationContext(),"Please Enter Source and Destination Correctly",
-                                Toast.LENGTH_LONG).show();
-                    }
-                    else
-                    {
-                        Intent intent = new Intent(MapsActivity.this, Routes.class);
-                        startActivity(intent);
-                    }
+                    Intent intent = new Intent(MapsActivity.this, Routes.class);
+                    startActivity(intent);
 
                 }
-            });*/
+            });
 
             buttonPreference.setOnClickListener(new View.OnClickListener() {
                 @Override
