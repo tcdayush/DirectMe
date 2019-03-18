@@ -531,4 +531,35 @@ import java.util.Objects;
 
         }
 
+        //TODO: Adding Polylines based on Response from Server
+    /*public void drawPath(String result) {
+        if (line != null) {
+            mMap.clear();
+        }
+        mMap.addMarker(new MarkerOptions().position(destinationLatlangObj));
+        mMap.addMarker(new MarkerOptions().position(sourceLatlangObj));
+        try {
+            // Tranform the string into a json object
+            final JSONObject json = new JSONObject(result);
+            JSONArray routeArray = json.getJSONArray("routes");
+            JSONObject routes = routeArray.getJSONObject(0);
+            JSONObject overviewPolylines = routes
+                    .getJSONObject("overview_polyline");
+            String encodedString = overviewPolylines.getString("points");
+            List<LatLng> list = decodePoly(encodedString);
+
+            for (int z = 0; z < list.size() - 1; z++) {
+                LatLng src = list.get(z);
+                LatLng dest = list.get(z + 1);
+                line = myMap.addPolyline(new PolylineOptions()
+                        .add(new LatLng(src.latitude, src.longitude),
+                                new LatLng(dest.latitude, dest.longitude))
+                        .width(5).color(Color.BLUE).geodesic(true));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }*/
+
     }
