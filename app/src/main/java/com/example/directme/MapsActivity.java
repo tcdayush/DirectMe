@@ -219,7 +219,6 @@ import java.util.Objects;
         }
 
 
-
         /**
          * Saves the state of the map when the activity is paused.
          */
@@ -515,4 +514,21 @@ import java.util.Objects;
                 Log.e("Exception: %s", e.getMessage());
             }
         }
+
+        @Override
+        protected void onPause(){
+            super.onPause();
+
+        }
+        @Override
+        protected void onResume(){
+            super.onResume();
+
+        }
+        @Override
+        protected void onDestroy(){
+            super.onDestroy();
+
+        }
+
     }
