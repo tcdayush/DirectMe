@@ -20,23 +20,18 @@ import java.util.ArrayList;
 
 public class Routes extends Activity {
 
-    private ArrayList<String> stringArrayList;
-    private  ArrayAdapter<String> stringArrayAdapter;
-
-    private TextView textView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.routes);
 
-        textView = findViewById(R.id.response);
+        TextView textView = findViewById(R.id.response);
         textView.setText("ABC");
         ListView listView = findViewById(R.id.listView);
 
-        stringArrayList= new ArrayList<>();
+        ArrayList<String> stringArrayList = new ArrayList<>();
 
-        stringArrayAdapter =new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1,stringArrayList);
+        ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, stringArrayList);
         listView.setAdapter(stringArrayAdapter);
 
         try

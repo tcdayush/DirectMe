@@ -159,7 +159,8 @@ import java.util.Objects;
                     Log.v("latitude:", "" + sourceLatlangObj.latitude);
                     Log.v("longitude:", "" + sourceLatlangObj.longitude);
 
-                    sourceMarker = mMap.addMarker(new MarkerOptions().position(sourceLatlangObj).draggable(true).title(place.getName()));
+                    sourceMarker = mMap.addMarker(new MarkerOptions().position(sourceLatlangObj)
+                            .title("Source: " + place.getName()));
 
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(sourceLatlangObj));
                 }
@@ -184,7 +185,8 @@ import java.util.Objects;
                     Log.v("latitude:", "" + destinationLatlangObj.latitude);
                     Log.v("longitude:", "" + destinationLatlangObj.longitude);
 
-                    destinationMarker = mMap.addMarker(new MarkerOptions().position(destinationLatlangObj));
+                    destinationMarker = mMap.addMarker(new MarkerOptions().position(destinationLatlangObj)
+                            .title("Destination: " + place.getName()));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(destinationLatlangObj));
                 }
 
