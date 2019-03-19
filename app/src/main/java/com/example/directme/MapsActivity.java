@@ -200,7 +200,10 @@ import java.util.Objects;
                 @Override
                 public void onClick(View v) {
 
-                    //TODO: Send the Preferencs and Location details to Server
+                    //TODO: Get the Google User acccount ID
+                    //TODO: Send the Google User acccount ID, Preferencs and Location details to Server
+                    //TODO: Wait for Server to Respond. Save or Overwrite the obtained JSON in assets Folder.
+                    // Start the below intent after previous steps
                     Intent intent = new Intent(MapsActivity.this, Routes.class);
                     startActivity(intent);
 

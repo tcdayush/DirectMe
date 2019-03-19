@@ -19,5 +19,5 @@
     <string name="pick_place">Choose a place</string>
     <string name="title_activity_test_poly_line">Map</string>
 
-    <string name="routes_setTextViewText">The routes will be shown here</string>
+    <string name="routes_setTextViewText">Route Options</string>
 </resources>
