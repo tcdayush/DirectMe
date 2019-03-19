@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 
@@ -40,8 +41,12 @@ public class Routes extends Activity {
 
         try
         {
-            JSONObject obj = new JSONObject(readJSONFromAsset());
+            JSONObject obj = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                obj = new JSONObject(readJSONFromAsset());
+            }
 
+            assert obj != null;
             JSONArray countries=obj.getJSONArray("Routes");
             for (int i=0;i<countries.length();i++){
                 JSONObject jsonObject=countries.getJSONObject(i);
@@ -55,7 +60,7 @@ public class Routes extends Activity {
 
 
         }catch (Exception e){
-            e.printStackTrace();
+            Log.d("Exception", e.toString());
         }
 
         /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
@@ -75,20 +80,21 @@ public class Routes extends Activity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public String readJSONFromAsset() {
         String json = null;
         try {
-            InputStream is = getAssets().open("sampleCombinedRoutes.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            //noinspection ResultOfMethodCallIgnored
-            is.read(buffer);
-            is.close();
+            byte[] buffer;
+            try (InputStream is = getAssets().open("sampleCombinedRoutes.json")) {
+                int size = is.available();
+                buffer = new byte[size];
+                is.read(buffer);
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 json = new String(buffer, UTF_8);
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Log.d("Exception", ex.toString());
             return null;
         }
         return json;

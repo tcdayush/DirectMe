@@ -59,10 +59,10 @@ import java.util.Objects;
         Marker destinationMarker;
         private static final String TAG = MapsActivity.class.getSimpleName();
         private GoogleMap mMap;
-        public CameraPosition mCameraPosition;
+        protected CameraPosition mCameraPosition;
 
         // The entry points to the Places API.
-        public GeoDataClient mGeoDataClient;
+        protected GeoDataClient mGeoDataClient;
         private PlaceDetectionClient mPlaceDetectionClient;
 
         // The entry point to the Fused Location Provider.

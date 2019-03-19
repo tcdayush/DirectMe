@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 public class Test1 extends Activity {
 
-    public static TextView response;
+    protected static TextView response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

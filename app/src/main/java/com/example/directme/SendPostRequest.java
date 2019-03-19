@@ -3,6 +3,7 @@ package com.example.directme;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -45,7 +46,7 @@ class SendPostRequest extends AsyncTask<String, Void, String> {
             postData = sb.toString();
             httpConnection.disconnect();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.d("Exception", e.toString());
         } finally {
             if (httpConnection!= null) {
                 httpConnection.disconnect();
