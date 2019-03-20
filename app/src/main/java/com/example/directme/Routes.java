@@ -81,7 +81,6 @@ public class Routes extends Activity {
             try (InputStream is = getAssets().open("sampleCombinedRoutes.json")) {
                 int size = is.available();
                 buffer = new byte[size];
-
                 int readSizeInputStream = is.read(buffer);
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
