@@ -56,11 +56,7 @@ public class Preferences extends Activity {
                  @Override
                  public void onClick(View v) {
 
-                     //Preferences obj = new Preferences();
                      JSONObject  jsonObject = makeJSONObject(pollutionAvoidance.isChecked(),weather.isChecked(),reliability.isChecked(),comfort.isChecked(),trafficAvoidance.isChecked());
-
-                     //String jsonConverted = convertStandardJSONString(jsonObject.toString());
-
 
                      try {
                          File directory = getFilesDir();
@@ -69,25 +65,12 @@ public class Preferences extends Activity {
                              output.write(jsonObject.toString());
                          }
 
-                         //Toast to Check local save
-                         /*Context ctx = getApplicationContext();
-                         FileInputStream fileInputStream = ctx.openFileInput("Preferences_" + personId + ".json");
-                         InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-                         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                         String lineData = bufferedReader.readLine();
-                         Toast.makeText(getApplicationContext(), lineData , Toast.LENGTH_LONG).show();*/
-
                          //TODO: Send Database to server (Based on specification)
                          //new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
-                         //Toast.makeText(getApplicationContext(), "Preferences saved in Global DB" , Toast.LENGTH_LONG).show();
 
                          Toast.makeText(getApplicationContext(), "Preferences saved" , Toast.LENGTH_LONG).show();
                          Intent intent = new Intent(Preferences.this, MapsActivity.class);
                          startActivity(intent);
-
-                         /*JSONObject reader = new JSONObject(file.toString());
-                         String pollutionAvoidanceValue = reader.getString("pollutionAvoidance");
-                         Toast.makeText(getApplicationContext(), pollutionAvoidanceValue , Toast.LENGTH_LONG).show();*/
 
                      } catch (Exception e) {
                          Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();

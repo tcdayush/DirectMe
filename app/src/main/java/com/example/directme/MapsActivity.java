@@ -96,6 +96,8 @@ import java.util.Objects;
         LatLng sourceLatlangObj;
         LatLng destinationLatlangObj;
 
+        String loggerExceptionString = "Exception: %s";
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -328,7 +330,7 @@ import java.util.Objects;
                                 }
                             } else {
                                 Log.d(TAG, "Current location is null. Using defaults.");
-                                Log.e(TAG, "Exception: %s", task.getException());
+                                Log.e(TAG, loggerExceptionString, task.getException());
                                 mMap.moveCamera(CameraUpdateFactory
                                         .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -337,7 +339,7 @@ import java.util.Objects;
                     });
                 }
             } catch (SecurityException e)  {
-                Log.e("Exception: %s", e.getMessage());
+                Log.e(loggerExceptionString, e.getMessage());
             }
         }
 
@@ -441,7 +443,7 @@ import java.util.Objects;
                                     openPlacesDialog();
 
                                 } else {
-                                    Log.e(TAG, "Exception: %s", task.getException());
+                                    Log.e(TAG, loggerExceptionString, task.getException());
                                 }
                             }
                         });
@@ -514,7 +516,7 @@ import java.util.Objects;
                     getLocationPermission();
                 }
             } catch (SecurityException e)  {
-                Log.e("Exception: %s", e.getMessage());
+                Log.e(loggerExceptionString, e.getMessage());
             }
         }
 

@@ -1,15 +1,6 @@
 package com.example.directme;
 
-import android.widget.Button;
-import android.widget.TextView;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 
 import static org.junit.Assert.*;
 
