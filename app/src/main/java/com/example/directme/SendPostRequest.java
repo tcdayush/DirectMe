@@ -6,6 +6,7 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -19,15 +20,15 @@ class SendPostRequest extends AsyncTask<String, Void, String> {
 
         String postData = "";
         HttpURLConnection httpConnection = null;
-        
+
         try {
 
-            httpConnection= (HttpURLConnection) new URL(params[0]).openConnection();
+            httpConnection = (HttpURLConnection) new URL(params[0]).openConnection();
             httpConnection.setRequestMethod("POST");
             httpConnection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
             httpConnection.setDoOutput(true);
 
-            DataOutputStream outputStream= new DataOutputStream(httpConnection.getOutputStream());
+            DataOutputStream outputStream = new DataOutputStream(httpConnection.getOutputStream());
             outputStream.writeBytes(params[1]);
             outputStream.flush();
             outputStream.close();
@@ -45,10 +46,10 @@ class SendPostRequest extends AsyncTask<String, Void, String> {
             }
             postData = sb.toString();
             httpConnection.disconnect();
-        } catch (Exception e) {
+        } catch (IOException e) {
             Log.d("Exception", e.toString());
         } finally {
-            if (httpConnection!= null) {
+            if (httpConnection != null) {
                 httpConnection.disconnect();
             }
         }

@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Listener Working", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(MainActivity.this, Registration_form.class);
+                Intent intent = new Intent(MainActivity.this, RegistrationForm.class);
                 startActivity(intent);
             }
         });
