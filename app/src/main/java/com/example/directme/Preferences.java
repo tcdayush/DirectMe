@@ -1,30 +1,23 @@
 package com.example.directme;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.io.InputStreamReader;
+import java.io.IOException;
 import java.io.Writer;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
-
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Preferences extends Activity {
 
@@ -46,14 +39,15 @@ public class Preferences extends Activity {
         trafficAvoidance = (findViewById(R.id.checkbox_traffic_congestion));
 
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(Preferences.this);
+        assert account != null;
         final String personId = account.getId();
 
-        //Put on hold
-        /*try {
-            loadPreferences();
+        try {
+            loadPreferences(personId);
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
+        }
+
 
         Button savePreferences = (findViewById(R.id.save_preferences));
         savePreferences.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +57,7 @@ public class Preferences extends Activity {
                  //Preferences obj = new Preferences();
                  JSONObject  jsonObject = makeJSONObject(pollutionAvoidance.isChecked(),weather.isChecked(),reliability.isChecked(),comfort.isChecked(),trafficAvoidance.isChecked());
 
+                 //String jsonConverted = convertStandardJSONString(jsonObject.toString());
 
 
                  try {
@@ -73,15 +68,15 @@ public class Preferences extends Activity {
                      output.close();
 
                      //Toast to Check local save
-                     Context ctx = getApplicationContext();
+                     /*Context ctx = getApplicationContext();
                      FileInputStream fileInputStream = ctx.openFileInput("Preferences_" + personId + ".json");
                      InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
                      BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                      String lineData = bufferedReader.readLine();
-                     Toast.makeText(getApplicationContext(), lineData , Toast.LENGTH_LONG).show();
-                     //Toast.makeText(getApplicationContext(), "Preferences saved" , Toast.LENGTH_LONG).show();
+                     Toast.makeText(getApplicationContext(), lineData , Toast.LENGTH_LONG).show();*/
 
-                     new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
+                     //TODO: Send Database to server (Based on specification)
+                     //new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
                      //Toast.makeText(getApplicationContext(), "Preferences saved in Global DB" , Toast.LENGTH_LONG).show();
 
                      Intent intent = new Intent(Preferences.this, MapsActivity.class);
@@ -117,22 +112,41 @@ public class Preferences extends Activity {
 
 
 
-    /*public void loadPreferences() throws JSONException {
+    public void loadPreferences(String personId) throws JSONException {
 
-        Toast.makeText(getApplicationContext(), "Test 1" , Toast.LENGTH_LONG).show();
+        try
+        {
+            File directory = getFilesDir();
+            File file = new File(directory,"Preferences_" + personId + ".json");
 
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(Preferences.this);
-        final String personId = account.getId();
+            if(file.exists())
+            {
+                JSONObject jsonObject = parseJSONFile(file.getAbsolutePath());
 
-        File directory = getFilesDir();
-        File file = new File(directory,"Preferences_" + personId + ".json");
+                pollutionAvoidance.setChecked(jsonObject.getBoolean("pollutionAvoidance"));
+                weather.setChecked(jsonObject.getBoolean("weather"));
+                reliability.setChecked(jsonObject.getBoolean("reliability"));
+                comfort.setChecked(jsonObject.getBoolean("comfort"));
+                trafficAvoidance.setChecked(jsonObject.getBoolean("trafficAvoidance"));
 
-        JSONObject reader = new JSONObject(file.toString());
-        Toast.makeText(getApplicationContext(), "test loop" , Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Preferences Loaded" , Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "Please select your preferences" , Toast.LENGTH_SHORT).show();
+            }
 
-        Boolean pollutionAvoidanceValue = reader.getBoolean("pollutionAvoidance");
-        pollutionAvoidance.setChecked(pollutionAvoidanceValue);
-    }*/
+        }catch (Exception  e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
+        }
+    }
 
 
+    public static JSONObject parseJSONFile(String filename) throws JSONException, IOException {
+        String content = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            content = new String(Files.readAllBytes(Paths.get(filename)));
+        }
+        return new JSONObject(content);
+    }
 }

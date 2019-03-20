@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,10 +25,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -40,20 +39,24 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
-    /**
+import java.util.Arrays;
+import java.util.Objects;
+
+/**
      * An activity that displays a map showing the place at the device's current location.
      */
     @SuppressLint("All")
     public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-        EditText inputSource;
-        EditText inputDestination;
         Button buttonSearch;
         Button buttonPreference;
-        String inputSourceString;
-        String inputDestinationString;
 
+        Marker sourceMarker;
+        Marker destinationMarker;
         private static final String TAG = MapsActivity.class.getSimpleName();
         private GoogleMap mMap;
         public CameraPosition mCameraPosition;
@@ -87,6 +90,12 @@ import com.google.android.gms.tasks.Task;
         private String[] mLikelyPlaceAttributions;
         private LatLng[] mLikelyPlaceLatLngs;
 
+        AutocompleteSupportFragment sourceAutocompleteFragment;
+        AutocompleteSupportFragment destinationAutocompleteFragment;
+
+        LatLng sourceLatlangObj;
+        LatLng destinationLatlangObj;
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -100,8 +109,6 @@ import com.google.android.gms.tasks.Task;
             // Retrieve the content view that renders the map.
             setContentView(R.layout.activity_maps);
 
-            inputDestination = findViewById(R.id.input_destination);
-            inputSource = findViewById(R.id.input_source);
             buttonSearch = findViewById(R.id.button_search);
             buttonPreference = findViewById(R.id.button_preferences);
 
@@ -121,13 +128,81 @@ import com.google.android.gms.tasks.Task;
                 mapFragment.getMapAsync(this);
             }
 
+            com.google.android.libraries.places.api.Places.initialize(getApplicationContext(), "AIzaSyBPFLxUS38OVBy6Na5fzroAMBo-Ka8-CKs");
 
+            sourceAutocompleteFragment = (AutocompleteSupportFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.source_autocomplete_fragment);
+            Objects.requireNonNull(sourceAutocompleteFragment).setHint("Source");
 
-            buttonSearch.setOnClickListener(new View.OnClickListener() {
+            destinationAutocompleteFragment = (AutocompleteSupportFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.destination_autocomplete_fragment);
+            Objects.requireNonNull(destinationAutocompleteFragment).setHint("Destination");
+
+            // Specify the types of place data to return.
+            sourceAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID,
+                    Place.Field.NAME,Place.Field.LAT_LNG,Place.Field.ADDRESS));
+            destinationAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID,
+                    Place.Field.NAME,Place.Field.LAT_LNG,Place.Field.ADDRESS));
+
+            // Set up a PlaceSelectionListener to handle the response.
+            sourceAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onPlaceSelected(@NonNull Place place) {
+
+                    if(sourceMarker != null) {
+                        sourceMarker.remove();
+                    }
+
+                    Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                    sourceLatlangObj = place.getLatLng();
+                    assert sourceLatlangObj != null;
+                    Log.v("latitude:", "" + sourceLatlangObj.latitude);
+                    Log.v("longitude:", "" + sourceLatlangObj.longitude);
+
+                    sourceMarker = mMap.addMarker(new MarkerOptions().position(sourceLatlangObj)
+                            .title("Source: " + place.getName()));
+
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(sourceLatlangObj));
+                }
+
+                @Override
+                public void onError(@NonNull Status status) {
+                    Log.i(TAG, "An error occurred: " + status);
+                }
+            });
+
+            destinationAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onPlaceSelected(@NonNull Place place) {
+
+                    if(destinationMarker != null) {
+                        destinationMarker.remove();
+                    }
+
+                    Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                    destinationLatlangObj = place.getLatLng();
+                    assert destinationLatlangObj != null;
+                    Log.v("latitude:", "" + destinationLatlangObj.latitude);
+                    Log.v("longitude:", "" + destinationLatlangObj.longitude);
+
+                    destinationMarker = mMap.addMarker(new MarkerOptions().position(destinationLatlangObj)
+                            .title("Destination: " + place.getName()));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(destinationLatlangObj));
+                }
+
+                @Override
+                public void onError(@NonNull Status status) {
+                    Log.i(TAG, "An error occurred: " + status);
+                }
+            });
+
+            /*buttonSearch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    inputSourceString = inputSource.getText().toString().trim();
+                    //TODO: Send the Preferencs and Location details to Server
+                    sourceAutocompleteFragment.getText();
+
                     inputDestinationString = inputDestination.getText().toString().trim();
 
                     if(inputSourceString.isEmpty()|| inputDestinationString.isEmpty())
@@ -142,7 +217,7 @@ import com.google.android.gms.tasks.Task;
                     }
 
                 }
-            });
+            });*/
 
             buttonPreference.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -200,6 +275,8 @@ import com.google.android.gms.tasks.Task;
         @Override
         public void onMapReady(GoogleMap map) {
             mMap = map;
+
+
 
             // Use a custom info window adapter to handle multiple lines of text in the
             // info window contents.
