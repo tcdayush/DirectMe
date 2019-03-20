@@ -196,28 +196,19 @@ import java.util.Objects;
                 }
             });
 
-            /*buttonSearch.setOnClickListener(new View.OnClickListener() {
+            buttonSearch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    //TODO: Send the Preferencs and Location details to Server
-                    sourceAutocompleteFragment.getText();
-
-                    inputDestinationString = inputDestination.getText().toString().trim();
-
-                    if(inputSourceString.isEmpty()|| inputDestinationString.isEmpty())
-                    {
-                        Toast.makeText(getApplicationContext(),"Please Enter Source and Destination Correctly",
-                                Toast.LENGTH_LONG).show();
-                    }
-                    else
-                    {
-                        Intent intent = new Intent(MapsActivity.this, Routes.class);
-                        startActivity(intent);
-                    }
+                    //TODO: Get the Google User acccount ID
+                    //TODO: Send the Google User acccount ID, Preferencs and Location details to Server
+                    //TODO: Wait for Server to Respond. Save or Overwrite the obtained JSON in assets Folder.
+                    // Start the below intent after previous steps
+                    Intent intent = new Intent(MapsActivity.this, Routes.class);
+                    startActivity(intent);
 
                 }
-            });*/
+            });
 
             buttonPreference.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -229,7 +220,6 @@ import java.util.Objects;
             });
 
         }
-
 
 
         /**
@@ -527,4 +517,52 @@ import java.util.Objects;
                 Log.e("Exception: %s", e.getMessage());
             }
         }
+
+        @Override
+        protected void onPause(){
+            super.onPause();
+
+        }
+        @Override
+        protected void onResume(){
+            super.onResume();
+
+        }
+        @Override
+        protected void onDestroy(){
+            super.onDestroy();
+
+        }
+
+        //TODO: Adding Polylines based on Response from Server
+    /*public void drawPath(String result) {
+        if (line != null) {
+            mMap.clear();
+        }
+        mMap.addMarker(new MarkerOptions().position(destinationLatlangObj));
+        mMap.addMarker(new MarkerOptions().position(sourceLatlangObj));
+        try {
+            // Tranform the string into a json object
+            final JSONObject json = new JSONObject(result);
+            JSONArray routeArray = json.getJSONArray("routes");
+            JSONObject routes = routeArray.getJSONObject(0);
+            JSONObject overviewPolylines = routes
+                    .getJSONObject("overview_polyline");
+            String encodedString = overviewPolylines.getString("points");
+            List<LatLng> list = decodePoly(encodedString);
+
+            for (int z = 0; z < list.size() - 1; z++) {
+                LatLng src = list.get(z);
+                LatLng dest = list.get(z + 1);
+                line = myMap.addPolyline(new PolylineOptions()
+                        .add(new LatLng(src.latitude, src.longitude),
+                                new LatLng(dest.latitude, dest.longitude))
+                        .width(5).color(Color.BLUE).geodesic(true));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }*/
+
     }
