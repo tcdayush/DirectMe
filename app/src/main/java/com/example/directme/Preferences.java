@@ -45,8 +45,8 @@ public class Preferences extends Activity {
 
         try {
             loadPreferences(personId);
-        } catch (JSONException e) {
-            Log.d("JSONException", e.toString());
+        } catch (Exception e) {
+            Log.d("Exception", e.toString());
         }
 
 
@@ -99,7 +99,7 @@ public class Preferences extends Activity {
 
 
 
-    public void loadPreferences(String personId) throws JSONException {
+    public void loadPreferences(String personId) {
 
         try
         {

@@ -205,9 +205,18 @@ import java.util.Objects;
                     //TODO: Get the Google User acccount ID
                     //TODO: Send the Google User acccount ID, Preferencs and Location details to Server
                     //TODO: Wait for Server to Respond. Save or Overwrite the obtained JSON in assets Folder.
+
+                    //new SendPostRequest(MapsActivity.this).execute("http://10.6.57.183:9092/hello", "");
+                    new SendPostRequest(MapsActivity.this).execute("http://10.6.57.183:9092/firstSearch/" +
+                            sourceLatlangObj.latitude + "/" +
+                            sourceLatlangObj.longitude + "/" +
+                            destinationLatlangObj.latitude + "/" +
+                            destinationLatlangObj.longitude + "/"
+                            , "");
+
                     // Start the below intent after previous steps
-                    Intent intent = new Intent(MapsActivity.this, Routes.class);
-                    startActivity(intent);
+                    /*Intent intent = new Intent(MapsActivity.this, Routes.class);
+                    startActivity(intent);*/
 
                 }
             });
