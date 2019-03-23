@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,9 +39,9 @@ class FetchData extends AsyncTask<Void, Void, Void> {
             }
             data = sb.toString();
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            Log.d("MalformedURLException", e.toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.d("IOException", e.toString());
         }
 
         return null;

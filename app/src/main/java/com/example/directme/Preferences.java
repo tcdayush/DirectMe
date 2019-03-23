@@ -3,6 +3,7 @@ package com.example.directme;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -44,54 +45,39 @@ public class Preferences extends Activity {
 
         try {
             loadPreferences(personId);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Log.d("Exception", e.toString());
         }
 
 
         Button savePreferences = (findViewById(R.id.save_preferences));
-        savePreferences.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            savePreferences.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
 
-                 //Preferences obj = new Preferences();
-                 JSONObject  jsonObject = makeJSONObject(pollutionAvoidance.isChecked(),weather.isChecked(),reliability.isChecked(),comfort.isChecked(),trafficAvoidance.isChecked());
+                     JSONObject  jsonObject = makeJSONObject(pollutionAvoidance.isChecked(),weather.isChecked(),reliability.isChecked(),comfort.isChecked(),trafficAvoidance.isChecked());
 
-                 //String jsonConverted = convertStandardJSONString(jsonObject.toString());
+                     try {
+                         File directory = getFilesDir();
+                         File file = new File(directory,"Preferences_" + personId + ".json");
+                         try (Writer output = new BufferedWriter(new FileWriter(file))) {
+                             output.write(jsonObject.toString());
+                         }
 
+                         //TODO: Send Database to server (Based on specification)
+                         //new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
 
-                 try {
-                     File directory = getFilesDir();
-                     File file = new File(directory,"Preferences_" + personId + ".json");
-                     Writer output = new BufferedWriter(new FileWriter(file));
-                     output.write(jsonObject.toString());
-                     output.close();
+                         Toast.makeText(getApplicationContext(), "Preferences saved" , Toast.LENGTH_LONG).show();
+                         Intent intent = new Intent(Preferences.this, MapsActivity.class);
+                         startActivity(intent);
 
-                     //Toast to Check local save
-                     /*Context ctx = getApplicationContext();
-                     FileInputStream fileInputStream = ctx.openFileInput("Preferences_" + personId + ".json");
-                     InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-                     BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                     String lineData = bufferedReader.readLine();
-                     Toast.makeText(getApplicationContext(), lineData , Toast.LENGTH_LONG).show();*/
-
-                     //TODO: Send Database to server (Based on specification)
-                     //new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
-                     //Toast.makeText(getApplicationContext(), "Preferences saved in Global DB" , Toast.LENGTH_LONG).show();
-
-                     Toast.makeText(getApplicationContext(), "Preferences saved" , Toast.LENGTH_LONG).show();
-                     Intent intent = new Intent(Preferences.this, MapsActivity.class);
-                     startActivity(intent);
-
-                     /*JSONObject reader = new JSONObject(file.toString());
-                     String pollutionAvoidanceValue = reader.getString("pollutionAvoidance");
-                     Toast.makeText(getApplicationContext(), pollutionAvoidanceValue , Toast.LENGTH_LONG).show();*/
-
-                 } catch (Exception e) {
-                     Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                     } catch (Exception e) {
+                         Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                     }
                  }
-             }
-         });
+             });
+        }
 
 
     }
@@ -106,14 +92,14 @@ public class Preferences extends Activity {
             obj.put("comfort", comfort);
             obj.put("trafficAvoidance", trafficAvoidance);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.d("JSONException", e.toString());
         }
         return obj;
     }
 
 
 
-    public void loadPreferences(String personId) throws JSONException {
+    public void loadPreferences(String personId) {
 
         try
         {

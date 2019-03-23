@@ -59,10 +59,10 @@ import java.util.Objects;
         Marker destinationMarker;
         private static final String TAG = MapsActivity.class.getSimpleName();
         private GoogleMap mMap;
-        public CameraPosition mCameraPosition;
+        protected CameraPosition mCameraPosition;
 
         // The entry points to the Places API.
-        public GeoDataClient mGeoDataClient;
+        protected GeoDataClient mGeoDataClient;
         private PlaceDetectionClient mPlaceDetectionClient;
 
         // The entry point to the Fused Location Provider.
@@ -95,6 +95,8 @@ import java.util.Objects;
 
         LatLng sourceLatlangObj;
         LatLng destinationLatlangObj;
+
+        String loggerExceptionString = "Exception: %s";
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -203,9 +205,18 @@ import java.util.Objects;
                     //TODO: Get the Google User acccount ID
                     //TODO: Send the Google User acccount ID, Preferencs and Location details to Server
                     //TODO: Wait for Server to Respond. Save or Overwrite the obtained JSON in assets Folder.
+
+                    //new SendPostRequest(MapsActivity.this).execute("http://10.6.57.183:9092/hello", "");
+                    new SendPostRequest(MapsActivity.this).execute("http://10.6.57.183:9092/firstSearch/" +
+                            sourceLatlangObj.latitude + "/" +
+                            sourceLatlangObj.longitude + "/" +
+                            destinationLatlangObj.latitude + "/" +
+                            destinationLatlangObj.longitude + "/"
+                            , "");
+
                     // Start the below intent after previous steps
-                    Intent intent = new Intent(MapsActivity.this, Routes.class);
-                    startActivity(intent);
+                    /*Intent intent = new Intent(MapsActivity.this, Routes.class);
+                    startActivity(intent);*/
 
                 }
             });
@@ -328,7 +339,7 @@ import java.util.Objects;
                                 }
                             } else {
                                 Log.d(TAG, "Current location is null. Using defaults.");
-                                Log.e(TAG, "Exception: %s", task.getException());
+                                Log.e(TAG, loggerExceptionString, task.getException());
                                 mMap.moveCamera(CameraUpdateFactory
                                         .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -337,7 +348,7 @@ import java.util.Objects;
                     });
                 }
             } catch (SecurityException e)  {
-                Log.e("Exception: %s", e.getMessage());
+                Log.e(loggerExceptionString, e.getMessage());
             }
         }
 
@@ -441,7 +452,7 @@ import java.util.Objects;
                                     openPlacesDialog();
 
                                 } else {
-                                    Log.e(TAG, "Exception: %s", task.getException());
+                                    Log.e(TAG, loggerExceptionString, task.getException());
                                 }
                             }
                         });
@@ -514,7 +525,7 @@ import java.util.Objects;
                     getLocationPermission();
                 }
             } catch (SecurityException e)  {
-                Log.e("Exception: %s", e.getMessage());
+                Log.e(loggerExceptionString, e.getMessage());
             }
         }
 

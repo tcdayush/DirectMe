@@ -33,7 +33,7 @@ import static org.hamcrest.Matchers.is;
 public class Registration_formTest {
 
     @Rule
-    public ActivityTestRule<Registration_form> mActivityTestRule = new ActivityTestRule<>(Registration_form.class);
+    public ActivityTestRule<RegistrationForm> mActivityTestRule = new ActivityTestRule<>(RegistrationForm.class);
 
     @Test
     public void registration_formTest() {

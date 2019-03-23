@@ -1,23 +1,18 @@
 package com.example.directme;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
-import android.view.View;
-
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -40,26 +35,29 @@ public class Routes extends Activity {
 
         try
         {
-            JSONObject obj = new JSONObject(readJSONFromAsset());
+            JSONObject obj = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                obj = new JSONObject(readJSONFromAsset());
+            }
 
+            assert obj != null;
             JSONArray countries=obj.getJSONArray("Routes");
             for (int i=0;i<countries.length();i++){
                 JSONObject jsonObject=countries.getJSONObject(i);
-                String Rank=jsonObject.getString("Rank");
-                String Modes=jsonObject.getString("Modes");
-                String Time=jsonObject.getString("Time");
-                String Distance=jsonObject.getString("Distance");
-                stringArrayList.add(Rank + " \t" + Modes + " \t" +Time + " \t" +Distance);
+                String rank=jsonObject.getString("Rank");
+                String modes=jsonObject.getString("Modes");
+                String time=jsonObject.getString("Time");
+                String distance=jsonObject.getString("Distance");
+                stringArrayList.add(rank + " \t" + modes + " \t" +time + " \t" +distance);
                 stringArrayAdapter.notifyDataSetChanged();
             }
 
 
         }catch (Exception e){
-            e.printStackTrace();
+            Log.d("Exception", e.toString());
         }
 
         /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-
             public void onItemClick(AdapterView<?> l, View v, int position, long id) {
                 Log.i("HelloListView", "You clicked Item: " + id + " at position:" + position);
                 Toast.makeText(getApplicationContext()," " + position,Toast.LENGTH_LONG).show();
@@ -75,20 +73,21 @@ public class Routes extends Activity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public String readJSONFromAsset() {
         String json = null;
         try {
-            InputStream is = getAssets().open("sampleCombinedRoutes.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            //noinspection ResultOfMethodCallIgnored
-            is.read(buffer);
-            is.close();
+            byte[] buffer;
+            try (InputStream is = getAssets().open("sampleCombinedRoutes.json")) {
+                int size = is.available();
+                buffer = new byte[size];
+                int readSizeInputStream = is.read(buffer);
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 json = new String(buffer, UTF_8);
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Log.d("Exception", ex.toString());
             return null;
         }
         return json;

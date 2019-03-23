@@ -2,12 +2,13 @@ package com.example.directme;
 
 
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,15 +34,15 @@ import java.io.Writer;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "My Tag" ;
-    private final int RC_SIGN_IN = 1;
+    private static final int RC_SIGN_IN = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button sign_in = (findViewById(R.id.sign_in));
-        TextView sign_up = (findViewById(R.id.sign_up_text));
+        Button signInButton = (findViewById(R.id.sign_in));
+        TextView signUpTextView = (findViewById(R.id.sign_up_text));
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -53,39 +54,32 @@ public class MainActivity extends AppCompatActivity {
         final GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         //listener to the sign up text
-        sign_up.setOnClickListener(new View.OnClickListener() {
+        signUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Listener Working", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(MainActivity.this, Registration_form.class);
+                Intent intent = new Intent(MainActivity.this, RegistrationForm.class);
                 startActivity(intent);
             }
         });
 
 
         //listener to the sign in button
-        sign_in.setOnClickListener(new View.OnClickListener() {
+        signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.sign_in:
                         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                         startActivityForResult(signInIntent, RC_SIGN_IN);
+                        break;
 
-                        /*if (acct != null) {
-                            String personName = acct.getDisplayName();
-                            *//*String personGivenName = acct.getGivenName();
-                            String personFamilyName = acct.getFamilyName();
-                            String personEmail = acct.getEmail();
-                            String personId = acct.getId();
-                            Uri personPhoto = acct.getPhotoUrl();*//*
+                    default:
+                        Toast.makeText(getApplicationContext(),"Default Switch Case Reached",
+                                Toast.LENGTH_SHORT).show();
+                        break;
 
-                            Toast.makeText(getApplicationContext(),personName,Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(MainActivity.this, Preferences.class);
-                            startActivity(intent);
-                        }
-                        break;*/
 
                 }
             }
@@ -106,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
         updateUI(account);
     }
 
-    protected void pushUserDetailsToServer(GoogleSignInAccount account,File file)
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    protected void pushUserDetailsToServer(GoogleSignInAccount account, File file)
     {
         try
         {
@@ -118,12 +113,14 @@ public class MainActivity extends AppCompatActivity {
         JSONObject  jsonObject = mainActivity.makeJSONObject(personId,personName, personMail);
 
 
-        Writer output = new BufferedWriter(new FileWriter(file));
-        output.write(jsonObject.toString());
-        output.close();
-        new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
+            try (Writer output = new BufferedWriter(new FileWriter(file)))
+            {
+                output.write(jsonObject.toString());
 
-        }catch (Exception e)
+                //new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
+            }
+        }
+        catch (Exception e)
         {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
@@ -136,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         {
             File directory = getFilesDir();
             File file = new File(directory,"Userdata_" + account.getId() + ".json");
-            if(file.exists()==false) {
+            if(!file.exists() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 pushUserDetailsToServer(account,file);
             }
             Intent intent = new Intent(MainActivity.this, MapsActivity.class);
@@ -155,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
@@ -167,8 +163,6 @@ public class MainActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-
-            // Signed in successfully, show authenticated UI.
             updateUI(account);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
@@ -185,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
             obj.put("personName", personName);
             obj.put("personMail", personMail);
         } catch (JSONException e) {
-            e.printStackTrace();
+                Log.d("JSONException", e.toString());
         }
         return obj;
     }
