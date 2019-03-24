@@ -42,7 +42,7 @@ class SendPostRequest extends AsyncTask<String, Void, String> {
         pDialog = new ProgressDialog(mContext);
         pDialog.setMessage("Please wait..");
         pDialog.setIndeterminate(true);
-        pDialog.setCancelable(true);
+        pDialog.setCancelable(false);
         pDialog.show();
 
     }
