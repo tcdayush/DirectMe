@@ -1,6 +1,7 @@
 package com.example.directme;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -9,6 +10,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,6 +30,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -43,6 +47,11 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -202,21 +211,31 @@ import java.util.Objects;
                 @Override
                 public void onClick(View v) {
 
-                    //TODO: Get the Google User acccount ID
-                    //TODO: Send the Google User acccount ID, Preferencs and Location details to Server
                     //TODO: Wait for Server to Respond. Save or Overwrite the obtained JSON in assets Folder.
 
-                    //new SendPostRequest(MapsActivity.this).execute("http://10.6.57.183:9092/hello", "");
-                    new SendPostRequest(MapsActivity.this).execute("http://10.6.57.183:9092/firstSearch/" +
-                            sourceLatlangObj.latitude + "/" +
-                            sourceLatlangObj.longitude + "/" +
-                            destinationLatlangObj.latitude + "/" +
-                            destinationLatlangObj.longitude + "/"
-                            , "");
+                    try {
+                        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+                        String personId = Objects.requireNonNull(account).getId();
 
+                        //new SendPostRequest(MapsActivity.this).execute("http://10.6.57.183:9092/hello", "");
+                        /*new SendPostRequest(MapsActivity.this).execute("http://10.6.57.183:9092/firstSearch/" +
+                                        personId + "/" +
+                                sourceLatlangObj.latitude + "/" +
+                                sourceLatlangObj.longitude + "/" +
+                                destinationLatlangObj.latitude + "/" +
+                                destinationLatlangObj.longitude + "/"
+                                , "");*/
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    /*String fileContentString = readFromFile("Routes.json",MapsActivity.this);
+                    Toast.makeText(getApplicationContext(),fileContentString,Toast.LENGTH_LONG).show();*/
                     // Start the below intent after previous steps
-                    /*Intent intent = new Intent(MapsActivity.this, Routes.class);
-                    startActivity(intent);*/
+                    Intent intent = new Intent(MapsActivity.this, Routes.class);
+                    startActivity(intent);
 
                 }
             });
@@ -545,35 +564,8 @@ import java.util.Objects;
 
         }
 
+
+
+
         //TODO: Adding Polylines based on Response from Server
-    /*public void drawPath(String result) {
-        if (line != null) {
-            mMap.clear();
-        }
-        mMap.addMarker(new MarkerOptions().position(destinationLatlangObj));
-        mMap.addMarker(new MarkerOptions().position(sourceLatlangObj));
-        try {
-            // Tranform the string into a json object
-            final JSONObject json = new JSONObject(result);
-            JSONArray routeArray = json.getJSONArray("routes");
-            JSONObject routes = routeArray.getJSONObject(0);
-            JSONObject overviewPolylines = routes
-                    .getJSONObject("overview_polyline");
-            String encodedString = overviewPolylines.getString("points");
-            List<LatLng> list = decodePoly(encodedString);
-
-            for (int z = 0; z < list.size() - 1; z++) {
-                LatLng src = list.get(z);
-                LatLng dest = list.get(z + 1);
-                line = myMap.addPolyline(new PolylineOptions()
-                        .add(new LatLng(src.latitude, src.longitude),
-                                new LatLng(dest.latitude, dest.longitude))
-                        .width(5).color(Color.BLUE).geodesic(true));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
-
-    }
+}

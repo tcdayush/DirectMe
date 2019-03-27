@@ -24,8 +24,7 @@ class SendPostRequest extends AsyncTask<String, Void, String> {
     @SuppressLint("StaticFieldLeak")
     private Context mContext;
 
-    SendPostRequest(Context context)
-    {
+    SendPostRequest(Context context) {
         this.mContext = context;
     }
 
@@ -89,55 +88,23 @@ class SendPostRequest extends AsyncTask<String, Void, String> {
     @Override
     public void onPostExecute(String result) {
         super.onPostExecute(result);
-        if(result!=null)
-        {
+        if (result != null) {
             try {
-                writeToFile(result,mContext);
-                String toastMessage = readFromFile(mContext);
-                Toast.makeText(mContext,toastMessage,Toast.LENGTH_SHORT).show();
+                writeToFile(result, mContext);
             } catch (Exception e) {
-                Log.d("onPostExecute: ",e.toString());
+                Log.d("onPostExecute: ", e.toString());
             }
         }
         pDialog.dismiss();
     }
 
-    private void writeToFile(String data,Context context) throws IOException {
+    private void writeToFile(String data, Context context) throws IOException {
 
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("Routes.json", Context.MODE_PRIVATE));
         outputStreamWriter.write(data);
         outputStreamWriter.close();
     }
 
-    private String readFromFile(Context context) {
-
-        String ret = "";
-
-        try {
-            InputStream inputStream = context.openFileInput("Routes.json");
-
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString;
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    stringBuilder.append(receiveString);
-                }
-
-                inputStream.close();
-                ret = stringBuilder.toString();
-            }
-        }
-        catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        }
-
-        return ret;
-    }
 }
 
 

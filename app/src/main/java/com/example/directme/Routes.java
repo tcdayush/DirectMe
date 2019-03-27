@@ -1,18 +1,28 @@
 package com.example.directme;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -33,6 +43,8 @@ public class Routes extends Activity {
         ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, stringArrayList);
         listView.setAdapter(stringArrayAdapter);
 
+        //TODO: Delete the file after closing the app
+
         try
         {
             JSONObject obj = null;
@@ -41,23 +53,40 @@ public class Routes extends Activity {
             }
 
             assert obj != null;
-            JSONArray countries=obj.getJSONArray("Routes");
-            for (int i=0;i<countries.length();i++){
-                JSONObject jsonObject=countries.getJSONObject(i);
-                String rank=jsonObject.getString("Rank");
-                String modes=jsonObject.getString("Modes");
-                String time=jsonObject.getString("Time");
-                String distance=jsonObject.getString("Distance");
-                stringArrayList.add(rank + " \t" + modes + " \t" +time + " \t" +distance);
+            JSONArray routesArray=obj.getJSONArray("Routes");
+            for (int i=0;i<routesArray.length();i++){
+                JSONObject routesJSONObject=routesArray.getJSONObject(i);
+                String rank=routesJSONObject.getString("rank");
+                String time=routesJSONObject.getString("time");
+                String distance=routesJSONObject.getString("distance");
+                JSONArray modesArray = routesJSONObject.getJSONArray("modes");
+                String type = "SOURCE -->  ";
+
+                for (int j=0;j<modesArray.length();j++) {
+                    JSONObject modesJSONObject = modesArray.getJSONObject(j);
+                    type += modesJSONObject.getString("type") + "  -->  ";
+                }
+
+                type += "DESTINATION";
+
+
+                stringArrayList.add(
+                        rank + ".  "
+                        + type + "\n"
+                        + "Time: " + Integer.parseInt(time)/60 + " Minutes \n"
+                        + "Distance: " + Float.parseFloat(distance)/1000 + "Kms"
+
+                );
                 stringArrayAdapter.notifyDataSetChanged();
             }
 
 
-        }catch (Exception e){
+
+    }catch (Exception e){
             Log.d("Exception", e.toString());
         }
 
-        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> l, View v, int position, long id) {
                 Log.i("HelloListView", "You clicked Item: " + id + " at position:" + position);
                 Toast.makeText(getApplicationContext()," " + position,Toast.LENGTH_LONG).show();
@@ -69,7 +98,7 @@ public class Routes extends Activity {
                 intent.putExtra("id", id);
                 startActivity(intent);
             }
-        });*/
+        });
 
     }
 
@@ -78,8 +107,11 @@ public class Routes extends Activity {
         String json = null;
         try {
             byte[] buffer;
+            //InputStream is = getApplicationContext().openFileInput("Routes.json");
             try (InputStream is = getAssets().open("sampleCombinedRoutes.json")) {
                 int size = is.available();
+
+
                 buffer = new byte[size];
                 int readSizeInputStream = is.read(buffer);
             }
