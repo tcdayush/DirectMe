@@ -1,11 +1,15 @@
 package com.example.directme;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -87,16 +91,25 @@ public class Routes extends Activity {
         }
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @SuppressLint("ApplySharedPref")
             public void onItemClick(AdapterView<?> l, View v, int position, long id) {
                 Log.i("HelloListView", "You clicked Item: " + id + " at position:" + position);
-                Toast.makeText(getApplicationContext()," " + position,Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext()," " + position,Toast.LENGTH_LONG).show();
                 // Then you start a new Activity via Intent
                 Intent intent = new Intent();
                 intent.setClass(Routes.this, MapsActivity.class);
-                intent.putExtra("position", position);
+                intent.putExtra("IntentID","FromRoutesIntent");
+                /*intent.putExtra("position", position);
                 // Or / And
-                intent.putExtra("id", id);
-                startActivity(intent);
+                intent.putExtra("id", id);*/
+
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt("position", position);
+                editor.commit();
+
+                //startActivity(intent);
+                ActivityCompat.startActivityForResult(Routes.this, new Intent(Routes.this, MapsActivity.class), 0, null);
             }
         });
 
