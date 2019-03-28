@@ -5,19 +5,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Environment;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,8 +24,7 @@ class SendPostRequest extends AsyncTask<String, Void, String> {
     @SuppressLint("StaticFieldLeak")
     private Context mContext;
 
-    SendPostRequest(Context context)
-    {
+    SendPostRequest(Context context) {
         this.mContext = context;
     }
 
@@ -42,7 +34,7 @@ class SendPostRequest extends AsyncTask<String, Void, String> {
         pDialog = new ProgressDialog(mContext);
         pDialog.setMessage("Please wait..");
         pDialog.setIndeterminate(true);
-        pDialog.setCancelable(true);
+        pDialog.setCancelable(false);
         pDialog.show();
 
     }
@@ -96,55 +88,23 @@ class SendPostRequest extends AsyncTask<String, Void, String> {
     @Override
     public void onPostExecute(String result) {
         super.onPostExecute(result);
-        if(result!=null)
-        {
+        if (result != null) {
             try {
-                writeToFile(result,mContext);
-                String toastMessage = readFromFile(mContext);
-                Toast.makeText(mContext,toastMessage,Toast.LENGTH_SHORT).show();
+                writeToFile(result, mContext);
             } catch (Exception e) {
-                Log.d("onPostExecute: ",e.toString());
+                Log.d("onPostExecute: ", e.toString());
             }
         }
         pDialog.dismiss();
     }
 
-    private void writeToFile(String data,Context context) throws IOException {
+    private void writeToFile(String data, Context context) throws IOException {
 
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("Routes.json", Context.MODE_PRIVATE));
         outputStreamWriter.write(data);
         outputStreamWriter.close();
     }
 
-    private String readFromFile(Context context) {
-
-        String ret = "";
-
-        try {
-            InputStream inputStream = context.openFileInput("Routes.json");
-
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    stringBuilder.append(receiveString);
-                }
-
-                inputStream.close();
-                ret = stringBuilder.toString();
-            }
-        }
-        catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        }
-
-        return ret;
-    }
 }
 
 

@@ -1,13 +1,142 @@
-{
-  "Routes": [
-    {
-      "Rank": "1",
-      "Modes": "Cycle > Bus > Walk",
-      "Time": "30m",
-      "Distance": "8.2 KM"
-    }
+{ "Routes": [
+  {
+    "modes": [
+      {
+        "distance": 634,
+        "startLocation": "53.34468630,-6.25445530",
+        "time": 465,
+        "type": "Walking",
+        "polyline": "i{qdIjqde@HFB@@@@@@@@@?JI~FK^An@EdEAr@B@z@DC~BChBAfA?l@IAGAGEEEGEEGGIEGECECEAGCIAK?_@u@Uo@IKMi@Mi@Oq@G[AMCKISAGEGEECAEAC?C?E@EBGH]h@QXEH",
+        "endLocation": "53.34620000,-6.25775300"
+      },
+      {
+        "distance": 7031,
+        "startLocation": "53.34624730,-6.25766530",
+        "time": 1901,
+        "type": "Bus",
+        "polyline": "aerdIleee@JTr@gANOV@FHbAdEz@rBb@j@pAbALZFZFdBL~KHzD@RE@@dABzA?f@~@?|@Gt@AB?p@?t@FD?HBF@L@RFHD@@\\PJFjBjB^`@|C`@d@NvBXv@JD@lAP`CZ\\?r@SZI^Md@MLCt@M~@ObAWj@Gt@Sl@MLC`@GNCV?L?T?H?z@Dp@Bv@@AAJ?n@@bE{@nKyAFA@AlASfASZGJ?H?H?L?D?LBD?h@HZDh@FVDn@F|ALt@HrBRJ@NBjALb@DjALB?jALtAPbAJl@HD?LBbCX`AJZBb@DF?v@HLBJ@JB^Fh@HJ@z@FnAPHBJHHHNLHPFPFTHZBF@FBT@BF^Lz@BRBLBRDLDJPR?@DDFDPLl@^z@f@JF`BbAzBvA`Al@n@b@RLnEtCd@X~@l@LHrAx@FF~BvAj@\\VPPJf@Xh@^FDbAl@`@VJFtA|@PJ~AbAPJz@h@x@h@j@^h@ZVTTRVXRb@FP@DDLDRhBqAl@a@l@[@AXMJAVGTENAxAWXK@SDOHQL]N[BITi@f@}AXeATy@^o@HQLQLM^WXQ\\YVOROTOZUVUt@i@TOVSNUNULWL[HSPu@La@@GDU\\mB?ANm@Ha@Jc@DQFO?AFOLW@EBEDGTc@b@w@NYp@mAPo@Ty@@IBUFkAD_BB}ADwADs@@IBWJo@LHFFJJLRFPZv@Tj@J`@FRRbAJv@l@~DT`BBLBJDL@?DFJL\\XTPx@h@f@\\l@ZPHJo@Hg@N}@Rk@BIPe@Rc@Pe@x@sBnAyC^_A`@aAlAyCjBsEl@}Ar@aBVq@Ti@HQLQPUVURQXSZMNE@?LENEPCd@?h@@d@Fv@J`@FX?\\@\\EJARGLILIBAVMVQVWNSP_@JOJYTy@@GCA",
+        "endLocation": "53.29573230,-6.25854530"
+      },
+      {
+        "distance": 130,
+        "startLocation": "53.29570850,-6.25856350",
+        "time": 119,
+        "type": "Walking",
+        "polyline": "eihdI~jee@Lm@NaBD]VyBDe@NHDB",
+        "endLocation": "53.29526980,-6.25695930"
+      },
+      {
+        "distance": 2173,
+        "startLocation": "53.29526980,-6.25695930",
+        "time": 486,
+        "type": "Bicycling",
+        "polyline": "mfhdI~`ee@^PbBPRDNLHX@RGNQRfA`EdAvEjAnE`BnH~BjJdAbE`@fBRdBHhBMdF]vF_@rDa@|CcAjGe@|Bw@bDmB|He@jBW~A{@dH}AfM_@jDrAjAj@tAXj@NPVR\\VC~@E|@IbBQ|AMp@GLHPXf@t@p@",
+        "endLocation": "53.29348530,-6.28451060"
+      },
+      {
+        "distance": 0,
+        "startLocation": "53.29348530,-6.28451060",
+        "time": 0,
+        "type": "Walking",
+        "polyline": "i{gdIdmje@",
+        "endLocation": "53.29348530,-6.28451060"
+      }
     ],
-  "1": [
-
+    "distance": 1000,
+    "time": 2971,
+    "rank": 1,
+    "preferences": [
+      {
+        "type": "pollution avoidance",
+        "startLocation": "29"
+      },
+      {
+        "type": "weather",
+        "startLocation": "04d"
+      }
+    ]
+  },
+  {
+    "modes": [
+      {
+        "distance": 634,
+        "startLocation": "53.34468630,-6.25445530",
+        "time": 465,
+        "type": "Walking",
+        "polyline": "i{qdIjqde@HFB@@@@@@@@@?JI~FK^An@EdEAr@B@z@DC~BChBAfA?l@IAGAGEEEGEEGGIEGECECEAGCIAK?_@u@Uo@IKMi@Mi@Oq@G[AMCKISAGEGEECAEAC?C?E@EBGH]h@QXEH",
+        "endLocation": "53.34620000,-6.25775300"
+      },
+      {
+        "distance": 7031,
+        "startLocation": "53.34624730,-6.25766530",
+        "time": 1901,
+        "type": "Bus",
+        "polyline": "aerdIleee@JTr@gANOV@FHbAdEz@rBb@j@pAbALZFZFdBL~KHzD@RE@@dABzA?f@~@?|@Gt@AB?p@?t@FD?HBF@L@RFHD@@\\PJFjBjB^`@|C`@d@NvBXv@JD@lAP`CZ\\?r@SZI^Md@MLCt@M~@ObAWj@Gt@Sl@MLC`@GNCV?L?T?H?z@Dp@Bv@@AAJ?n@@bE{@nKyAFA@AlASfASZGJ?H?H?L?D?LBD?h@HZDh@FVDn@F|ALt@HrBRJ@NBjALb@DjALB?jALtAPbAJl@HD?LBbCX`AJZBb@DF?v@HLBJ@JB^Fh@HJ@z@FnAPHBJHHHNLHPFPFTHZBF@FBT@BF^Lz@BRBLBRDLDJPR?@DDFDPLl@^z@f@JF`BbAzBvA`Al@n@b@RLnEtCd@X~@l@LHrAx@FF~BvAj@\\VPPJf@Xh@^FDbAl@`@VJFtA|@PJ~AbAPJz@h@x@h@j@^h@ZVTTRVXRb@FP@DDLDRhBqAl@a@l@[@AXMJAVGTENAxAWXK@SDOHQL]N[BITi@f@}AXeATy@^o@HQLQLM^WXQ\\YVOROTOZUVUt@i@TOVSNUNULWL[HSPu@La@@GDU\\mB?ANm@Ha@Jc@DQFO?AFOLW@EBEDGTc@b@w@NYp@mAPo@Ty@@IBUFkAD_BB}ADwADs@@IBWJo@LHFFJJLRFPZv@Tj@J`@FRRbAJv@l@~DT`BBLBJDL@?DFJL\\XTPx@h@f@\\l@ZPHJo@Hg@N}@Rk@BIPe@Rc@Pe@x@sBnAyC^_A`@aAlAyCjBsEl@}Ar@aBVq@Ti@HQLQPUVURQXSZMNE@?LENEPCd@?h@@d@Fv@J`@FX?\\@\\EJARGLILIBAVMVQVWNSP_@JOJYTy@@GCA",
+        "endLocation": "53.29573230,-6.25854530"
+      },
+      {
+        "distance": 130,
+        "startLocation": "53.29570850,-6.25856350",
+        "time": 119,
+        "type": "Walking",
+        "polyline": "eihdI~jee@Lm@NaBD]VyBDe@NHDB",
+        "endLocation": "53.29526980,-6.25695930"
+      },
+      {
+        "distance": 2173,
+        "startLocation": "53.29526980,-6.25695930",
+        "time": 486,
+        "type": "Bicycling",
+        "polyline": "mfhdI~`ee@^PbBPRDNLHX@RGNQRfA`EdAvEjAnE`BnH~BjJdAbE`@fBRdBHhBMdF]vF_@rDa@|CcAjGe@|Bw@bDmB|He@jBW~A{@dH}AfM_@jDrAjAj@tAXj@NPVR\\VC~@E|@IbBQ|AMp@GLHPXf@t@p@",
+        "endLocation": "53.29348530,-6.28451060"
+      },
+      {
+        "distance": 0,
+        "startLocation": "53.29348530,-6.28451060",
+        "time": 0,
+        "type": "Walking",
+        "polyline": "i{gdIdmje@",
+        "endLocation": "53.29348530,-6.28451060"
+      }
+    ],
+    "distance": 2000,
+    "time": 2971,
+    "rank": 2,
+    "preferences": [
+      {
+        "type": "pollution avoidance",
+        "startLocation": "29"
+      },
+      {
+        "type": "weather",
+        "startLocation": "04d"
+      }
+    ]
+  },
+  {
+    "modes": [
+      {
+        "distance": 634,
+        "startLocation": "53.34468630,-6.25445530",
+        "time": 465,
+        "type": "Walking",
+        "polyline": "wlrdIno_e@tx@~}D",
+        "endLocation": "53.34620000,-6.25775300"
+      }
+    ],
+    "distance": 2000,
+    "time": 2971,
+    "rank": 3,
+    "preferences": [
+      {
+        "type": "pollution avoidance",
+        "startLocation": "29"
+      },
+      {
+        "type": "weather",
+        "startLocation": "04d"
+      }
+    ]
+  }
   ]
 }

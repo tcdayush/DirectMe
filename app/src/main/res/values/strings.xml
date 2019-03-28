@@ -20,4 +20,5 @@
     <string name="title_activity_test_poly_line">Map</string>
 
     <string name="routes_setTextViewText">Route Options</string>
+    <string name="routes_fileName">Routes</string>
 </resources>

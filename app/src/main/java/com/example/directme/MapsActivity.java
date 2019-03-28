@@ -1,20 +1,30 @@
 package com.example.directme;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
+import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.content.DialogInterface;
@@ -26,7 +36,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -37,14 +49,28 @@ import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.maps.android.PolyUtil;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
      * An activity that displays a map showing the place at the device's current location.
@@ -101,6 +127,7 @@ import java.util.Objects;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
 
             // Retrieve location and camera position from saved instance state.
             if (savedInstanceState != null) {
@@ -202,21 +229,31 @@ import java.util.Objects;
                 @Override
                 public void onClick(View v) {
 
-                    //TODO: Get the Google User acccount ID
-                    //TODO: Send the Google User acccount ID, Preferencs and Location details to Server
                     //TODO: Wait for Server to Respond. Save or Overwrite the obtained JSON in assets Folder.
 
-                    //new SendPostRequest(MapsActivity.this).execute("http://10.6.57.183:9092/hello", "");
-                    new SendPostRequest(MapsActivity.this).execute("http://10.6.57.183:9092/firstSearch/" +
-                            sourceLatlangObj.latitude + "/" +
-                            sourceLatlangObj.longitude + "/" +
-                            destinationLatlangObj.latitude + "/" +
-                            destinationLatlangObj.longitude + "/"
-                            , "");
+                    try {
+                        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+                        String personId = Objects.requireNonNull(account).getId();
 
+                        //new SendPostRequest(MapsActivity.this).execute("http://10.6.57.183:9092/hello", "");
+                        /*new SendPostRequest(MapsActivity.this).execute("http://10.6.57.183:9092/firstSearch/" +
+                                        personId + "/" +
+                                sourceLatlangObj.latitude + "/" +
+                                sourceLatlangObj.longitude + "/" +
+                                destinationLatlangObj.latitude + "/" +
+                                destinationLatlangObj.longitude + "/"
+                                , "");*/
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    /*String fileContentString = readFromFile("Routes.json",MapsActivity.this);
+                    Toast.makeText(getApplicationContext(),fileContentString,Toast.LENGTH_LONG).show();*/
                     // Start the below intent after previous steps
-                    /*Intent intent = new Intent(MapsActivity.this, Routes.class);
-                    startActivity(intent);*/
+                    Intent intent = new Intent(MapsActivity.this, Routes.class);
+                    startActivity(intent);
 
                 }
             });
@@ -313,6 +350,14 @@ import java.util.Objects;
 
             // Get the current location of the device and set the position of the map.
             getDeviceLocation();
+
+            if (getCallingActivity() != null) {
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                int position = settings.getInt("position",-1) + 1;
+                //Toast.makeText(getApplicationContext(),position +"",Toast.LENGTH_LONG).show();
+                readPolylineFromJSON(position);
+                //Log.d(TAG, getCallingActivity().getClassName());
+            }
         }
 
         /**
@@ -537,43 +582,89 @@ import java.util.Objects;
         @Override
         protected void onResume(){
             super.onResume();
-
         }
+
         @Override
         protected void onDestroy(){
             super.onDestroy();
 
         }
 
-        //TODO: Adding Polylines based on Response from Server
-    /*public void drawPath(String result) {
-        if (line != null) {
-            mMap.clear();
-        }
-        mMap.addMarker(new MarkerOptions().position(destinationLatlangObj));
-        mMap.addMarker(new MarkerOptions().position(sourceLatlangObj));
-        try {
-            // Tranform the string into a json object
-            final JSONObject json = new JSONObject(result);
-            JSONArray routeArray = json.getJSONArray("routes");
-            JSONObject routes = routeArray.getJSONObject(0);
-            JSONObject overviewPolylines = routes
-                    .getJSONObject("overview_polyline");
-            String encodedString = overviewPolylines.getString("points");
-            List<LatLng> list = decodePoly(encodedString);
+    @Override
+    protected void onStart(){
+        super.onStart();
+    }
 
-            for (int z = 0; z < list.size() - 1; z++) {
-                LatLng src = list.get(z);
-                LatLng dest = list.get(z + 1);
-                line = myMap.addPolyline(new PolylineOptions()
-                        .add(new LatLng(src.latitude, src.longitude),
-                                new LatLng(dest.latitude, dest.longitude))
-                        .width(5).color(Color.BLUE).geodesic(true));
+    //TODO: Code duplication with Routes.java. Refactoring required @AyushM
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public String readJSONFromAsset() {
+        String json = null;
+        try {
+            byte[] buffer;
+            //InputStream is = getApplicationContext().openFileInput("Routes.json");
+            try (InputStream is = getAssets().open("sampleCombinedRoutes.json")) {
+                int size = is.available();
+
+
+                buffer = new byte[size];
+                int readSizeInputStream = is.read(buffer);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                json = new String(buffer, UTF_8);
+            }
+        } catch (Exception ex) {
+            Log.d("Exception", ex.toString());
+            return null;
+        }
+        return json;
+    }
+
+    public void readPolylineFromJSON(int index){
+        try
+        {
+            JSONObject obj = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                obj = new JSONObject(readJSONFromAsset());
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            assert obj != null;
+            JSONArray routesArray=obj.getJSONArray("Routes");
+            for (int i=0;i<routesArray.length();i++){
+                JSONObject routesJSONObject=routesArray.getJSONObject(i);
+                int rank=routesJSONObject.getInt("rank");
+                if(rank == index)
+                {
+                    JSONArray modesArray = routesJSONObject.getJSONArray("modes");
+                    for (int j=0;j<modesArray.length();j++) {
+                        JSONObject modesJSONObject = modesArray.getJSONObject(j);
+                        String type = modesJSONObject.getString("type");
+                        String polyline = modesJSONObject.getString("polyline");
+                        //Toast.makeText(getApplicationContext(),type + polyline,Toast.LENGTH_LONG).show();
+                        plotPolyline(type,polyline);
+                    }
+                }
+            }
+        }catch (Exception e){
+            Log.d("Exception", e.toString());
         }
-    }*/
-
     }
+
+    public void plotPolyline(String type, String polyline)
+    {
+        PolylineOptions lineOptions = new PolylineOptions();
+
+        switch(type){
+            case "Walking":  lineOptions.color(Color.GREEN); break;
+            case "Bus":  lineOptions.color(Color.RED); break;
+            case "Bicycling":  lineOptions.color(Color.BLUE); break;
+            default: lineOptions.color(Color.GRAY); break;
+        }
+
+        lineOptions.width(7);
+        lineOptions.geodesic(true);
+        List<LatLng> decodedPath = PolyUtil.decode(polyline);
+        lineOptions.addAll(decodedPath);
+
+       mMap.addPolyline(lineOptions);
+    }
+}
