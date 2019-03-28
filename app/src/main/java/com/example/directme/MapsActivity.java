@@ -639,8 +639,11 @@ import static java.nio.charset.StandardCharsets.UTF_8;
                         JSONObject modesJSONObject = modesArray.getJSONObject(j);
                         String type = modesJSONObject.getString("type");
                         String polyline = modesJSONObject.getString("polyline");
-                        //Toast.makeText(getApplicationContext(),type + polyline,Toast.LENGTH_LONG).show();
-                        plotPolyline(type,polyline);
+                        Double startLocationLat = modesJSONObject.getDouble("startLocationLat");
+                        Double startLocationLong = modesJSONObject.getDouble("startLocationLong");
+                        Double endLocationLat = modesJSONObject.getDouble("endLocationLat");
+                        Double endLocationLong = modesJSONObject.getDouble("endLocationLong");
+                        plotPolyline(type,polyline,startLocationLat,startLocationLong,endLocationLat,endLocationLong);
                     }
                 }
             }
@@ -649,7 +652,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
         }
     }
 
-    public void plotPolyline(String type, String polyline)
+    public void plotPolyline(String type, String polyline, Double startLocationLat,Double startLocationLong,Double endLocationLat,Double endLocationLong)
     {
         PolylineOptions lineOptions = new PolylineOptions();
 
@@ -666,5 +669,12 @@ import static java.nio.charset.StandardCharsets.UTF_8;
         lineOptions.addAll(decodedPath);
 
        mMap.addPolyline(lineOptions);
+
+        // create marker
+        MarkerOptions startMarker = new MarkerOptions().position(new LatLng(startLocationLat, startLocationLong)).title(type + " Begins");
+        MarkerOptions stopMarker = new MarkerOptions().position(new LatLng(endLocationLat, endLocationLong)).title(type + " Ends");
+        // adding marker
+        mMap.addMarker(startMarker);
+        mMap.addMarker(stopMarker);
     }
 }
