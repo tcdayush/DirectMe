@@ -51,6 +51,5 @@ class FetchData extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        Test1.response.setText(this.data);
     }
 }

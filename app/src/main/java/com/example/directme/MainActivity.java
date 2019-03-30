@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
             {
                 output.write(jsonObject.toString());
 
-                //new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
+                //TODO: Send data to Database. //new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
             }
         }
         catch (Exception e)

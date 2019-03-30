@@ -1,7 +1,6 @@
 package com.example.directme;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,13 +17,11 @@ import android.os.Bundle;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.content.DialogInterface;
@@ -36,9 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -49,7 +44,6 @@ import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -57,15 +51,9 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.maps.android.PolyUtil;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -229,28 +217,21 @@ import static java.nio.charset.StandardCharsets.UTF_8;
                 @Override
                 public void onClick(View v) {
 
-                    //TODO: Wait for Server to Respond. Save or Overwrite the obtained JSON in assets Folder.
-
                     try {
                         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
                         String personId = Objects.requireNonNull(account).getId();
 
-                        //new SendPostRequest(MapsActivity.this).execute("http://10.6.57.183:9092/hello", "");
-                        /*new SendPostRequest(MapsActivity.this).execute("http://10.6.57.183:9092/firstSearch/" +
+                        new SendPostRequest(MapsActivity.this).execute("http://10.6.57.183:9092/firstSearch/" +
                                         personId + "/" +
                                 sourceLatlangObj.latitude + "/" +
                                 sourceLatlangObj.longitude + "/" +
                                 destinationLatlangObj.latitude + "/" +
                                 destinationLatlangObj.longitude + "/"
-                                , "");*/
-
+                                , "");
 
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.d("buttonSearch",e.toString());
                     }
-
-                    /*String fileContentString = readFromFile("Routes.json",MapsActivity.this);
-                    Toast.makeText(getApplicationContext(),fileContentString,Toast.LENGTH_LONG).show();*/
                     // Start the below intent after previous steps
                     Intent intent = new Intent(MapsActivity.this, Routes.class);
                     startActivity(intent);
@@ -354,9 +335,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
             if (getCallingActivity() != null) {
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 int position = settings.getInt("position",-1) + 1;
-                //Toast.makeText(getApplicationContext(),position +"",Toast.LENGTH_LONG).show();
                 readPolylineFromJSON(position);
-                //Log.d(TAG, getCallingActivity().getClassName());
             }
         }
 
@@ -429,11 +408,10 @@ import static java.nio.charset.StandardCharsets.UTF_8;
             switch (requestCode) {
                 case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
                     // If request is cancelled, the result arrays are empty.
-                    if (grantResults.length > 0
-                            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        mLocationPermissionGranted = true;
-                    }
+                    grantPermission(grantResults);
+                    break;
                 }
+                default: Log.d("Request Permission Result","Request Denied");break;
             }
             updateLocationUI();
         }
@@ -601,13 +579,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
         String json = null;
         try {
             byte[] buffer;
-            //InputStream is = getApplicationContext().openFileInput("Routes.json");
             try (InputStream is = getAssets().open("sampleCombinedRoutes.json")) {
                 int size = is.available();
 
 
                 buffer = new byte[size];
                 int readSizeInputStream = is.read(buffer);
+                Log.d("reading JSON from Asset", String.valueOf(readSizeInputStream));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 json = new String(buffer, UTF_8);
@@ -639,8 +617,11 @@ import static java.nio.charset.StandardCharsets.UTF_8;
                         JSONObject modesJSONObject = modesArray.getJSONObject(j);
                         String type = modesJSONObject.getString("type");
                         String polyline = modesJSONObject.getString("polyline");
-                        //Toast.makeText(getApplicationContext(),type + polyline,Toast.LENGTH_LONG).show();
-                        plotPolyline(type,polyline);
+                        Double startLocationLat = modesJSONObject.getDouble("startLocationLat");
+                        Double startLocationLong = modesJSONObject.getDouble("startLocationLong");
+                        Double endLocationLat = modesJSONObject.getDouble("endLocationLat");
+                        Double endLocationLong = modesJSONObject.getDouble("endLocationLong");
+                        plotPolyline(type,polyline,startLocationLat,startLocationLong,endLocationLat,endLocationLong);
                     }
                 }
             }
@@ -649,7 +630,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
         }
     }
 
-    public void plotPolyline(String type, String polyline)
+    public void plotPolyline(String type, String polyline, Double startLocationLat,Double startLocationLong,Double endLocationLat,Double endLocationLong)
     {
         PolylineOptions lineOptions = new PolylineOptions();
 
@@ -666,5 +647,20 @@ import static java.nio.charset.StandardCharsets.UTF_8;
         lineOptions.addAll(decodedPath);
 
        mMap.addPolyline(lineOptions);
+
+        // create marker
+        MarkerOptions startMarker = new MarkerOptions().position(new LatLng(startLocationLat, startLocationLong)).title(type + " Begins");
+        MarkerOptions stopMarker = new MarkerOptions().position(new LatLng(endLocationLat, endLocationLong)).title(type + " Ends");
+        // adding marker
+        mMap.addMarker(startMarker);
+        mMap.addMarker(stopMarker);
+    }
+
+    public void grantPermission(int[] grantResults)
+    {
+        if (grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true;
+        }
     }
 }

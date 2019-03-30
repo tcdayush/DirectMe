@@ -2,7 +2,6 @@ package com.example.directme;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -16,17 +15,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -94,21 +85,15 @@ public class Routes extends Activity {
             @SuppressLint("ApplySharedPref")
             public void onItemClick(AdapterView<?> l, View v, int position, long id) {
                 Log.i("HelloListView", "You clicked Item: " + id + " at position:" + position);
-                //Toast.makeText(getApplicationContext()," " + position,Toast.LENGTH_LONG).show();
                 // Then you start a new Activity via Intent
                 Intent intent = new Intent();
                 intent.setClass(Routes.this, MapsActivity.class);
-                intent.putExtra("IntentID","FromRoutesIntent");
-                /*intent.putExtra("position", position);
-                // Or / And
-                intent.putExtra("id", id);*/
 
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putInt("position", position);
                 editor.commit();
 
-                //startActivity(intent);
                 ActivityCompat.startActivityForResult(Routes.this, new Intent(Routes.this, MapsActivity.class), 0, null);
             }
         });
@@ -120,13 +105,11 @@ public class Routes extends Activity {
         String json = null;
         try {
             byte[] buffer;
-            //InputStream is = getApplicationContext().openFileInput("Routes.json");
             try (InputStream is = getAssets().open("sampleCombinedRoutes.json")) {
                 int size = is.available();
-
-
                 buffer = new byte[size];
                 int readSizeInputStream = is.read(buffer);
+                Log.d("readSizeInputStream:",String.valueOf(readSizeInputStream));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 json = new String(buffer, UTF_8);
