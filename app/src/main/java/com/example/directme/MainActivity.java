@@ -64,12 +64,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         //listener to the sign in button
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
+
                     case R.id.sign_in:
                         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -79,15 +79,9 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"Default Switch Case Reached",
                                 Toast.LENGTH_SHORT).show();
                         break;
-
-
                 }
             }
         });
-
-
-
-
     }
 
     @Override
@@ -105,18 +99,16 @@ public class MainActivity extends AppCompatActivity {
     {
         try
         {
-        String personId = account.getId();
-        String personName = account.getGivenName();
-        String personMail = account.getEmail();
+            String personId = account.getId();
+            String personName = account.getGivenName();
+            String personMail = account.getEmail();
 
-        MainActivity mainActivity = new MainActivity();
-        JSONObject  jsonObject = mainActivity.makeJSONObject(personId,personName, personMail);
-
+            MainActivity mainActivity = new MainActivity();
+            JSONObject  jsonObject = mainActivity.makeJSONObject(personId,personName, personMail);
 
             try (Writer output = new BufferedWriter(new FileWriter(file)))
             {
                 output.write(jsonObject.toString());
-
                 //TODO: Send data to Database. //new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
             }
         }
@@ -144,8 +136,6 @@ public class MainActivity extends AppCompatActivity {
         {
             Toast.makeText(getApplicationContext(),"Not Signed In. Please Login",Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
     @Override

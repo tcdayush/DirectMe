@@ -293,10 +293,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
          */
         @Override
         public void onMapReady(GoogleMap map) {
+
             mMap = map;
-
-
-
             // Use a custom info window adapter to handle multiple lines of text in the
             // info window contents.
             mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
