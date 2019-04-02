@@ -78,8 +78,6 @@ public class Preferences extends Activity {
                  }
              });
         }
-
-
     }
 
     private JSONObject makeJSONObject(Boolean pollutionAvoidance, Boolean weather, Boolean reliability, Boolean comfort, Boolean trafficAvoidance)
@@ -96,8 +94,6 @@ public class Preferences extends Activity {
         }
         return obj;
     }
-
-
 
     public void loadPreferences(String personId) {
 
@@ -127,7 +123,6 @@ public class Preferences extends Activity {
             Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
         }
     }
-
 
     public static JSONObject parseJSONFile(String filename) throws JSONException, IOException {
         String content = null;

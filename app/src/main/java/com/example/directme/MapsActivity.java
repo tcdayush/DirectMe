@@ -53,6 +53,8 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.maps.android.PolyUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -573,17 +575,16 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
     //TODO: Code duplication with Routes.java. Refactoring required @AyushM
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public String readJSONFromAsset() {
+    public String readJSONFromDirectory() {
         String json = null;
+        String filePath = getFilesDir().getAbsolutePath();
         try {
             byte[] buffer;
-            try (InputStream is = getAssets().open("sampleCombinedRoutes.json")) {
+            try (InputStream is = new FileInputStream(filePath+ "sampleCombinedRoutes.json")) {
                 int size = is.available();
-
-
                 buffer = new byte[size];
                 int readSizeInputStream = is.read(buffer);
-                Log.d("reading JSON from Asset", String.valueOf(readSizeInputStream));
+                Log.d("readSizeInputStream:",String.valueOf(readSizeInputStream));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 json = new String(buffer, UTF_8);
@@ -600,7 +601,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
         {
             JSONObject obj = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                obj = new JSONObject(readJSONFromAsset());
+                obj = new JSONObject(readJSONFromDirectory());
             }
 
             assert obj != null;

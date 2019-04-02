@@ -44,7 +44,7 @@ public class Routes extends Activity {
         {
             JSONObject obj = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                obj = new JSONObject(new MapsActivity().readJSONFromAsset());
+                obj = new JSONObject(readJSONFromAsset());
             }
 
             assert obj != null;
@@ -100,7 +100,7 @@ public class Routes extends Activity {
 
     }
 
-    /*@RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public String readJSONFromAsset() {
         String json = null;
         try {
@@ -119,5 +119,5 @@ public class Routes extends Activity {
             return null;
         }
         return json;
-    }*/
+    }
 }
