@@ -17,6 +17,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -34,7 +36,6 @@ public class Routes extends Activity {
         ListView listView = findViewById(R.id.listView);
 
         ArrayList<String> stringArrayList = new ArrayList<>();
-
         ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, stringArrayList);
         listView.setAdapter(stringArrayAdapter);
 
@@ -44,7 +45,7 @@ public class Routes extends Activity {
         {
             JSONObject obj = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                obj = new JSONObject(readJSONFromAsset());
+                obj = new JSONObject(readJSONFromDirectory());
             }
 
             assert obj != null;
@@ -64,7 +65,6 @@ public class Routes extends Activity {
 
                 type += "DESTINATION";
 
-
                 stringArrayList.add(
                         rank + ".  "
                         + type + "\n"
@@ -74,10 +74,7 @@ public class Routes extends Activity {
                 );
                 stringArrayAdapter.notifyDataSetChanged();
             }
-
-
-
-    }catch (Exception e){
+        }catch (Exception e){
             Log.d("Exception", e.toString());
         }
 
@@ -97,15 +94,15 @@ public class Routes extends Activity {
                 ActivityCompat.startActivityForResult(Routes.this, new Intent(Routes.this, MapsActivity.class), 0, null);
             }
         });
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public String readJSONFromAsset() {
+    public String readJSONFromDirectory() {
         String json = null;
+        String filePath = getFilesDir().getAbsolutePath();
         try {
             byte[] buffer;
-            try (InputStream is = getAssets().open("sampleCombinedRoutes.json")) {
+            try (InputStream is = new FileInputStream(filePath+ "sampleCombinedRoutes.json")) {
                 int size = is.available();
                 buffer = new byte[size];
                 int readSizeInputStream = is.read(buffer);

@@ -173,4 +173,15 @@ public class MainActivity extends AppCompatActivity {
         }
         return obj;
     }
+
+    @Override
+    protected void onDestroy() {
+
+        File file = new File(getFilesDir(),"sampleCombinedRoutes.json");
+        if(file.exists()){
+            file.delete();
+        }
+
+        super.onDestroy();
+    }
 }
