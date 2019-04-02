@@ -44,7 +44,7 @@ public class Routes extends Activity {
         {
             JSONObject obj = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                obj = new JSONObject(readJSONFromAsset());
+                obj = new JSONObject(new MapsActivity().readJSONFromDirectory());
             }
 
             assert obj != null;
@@ -100,24 +100,4 @@ public class Routes extends Activity {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public String readJSONFromAsset() {
-        String json = null;
-        try {
-            byte[] buffer;
-            try (InputStream is = getAssets().open("sampleCombinedRoutes.json")) {
-                int size = is.available();
-                buffer = new byte[size];
-                int readSizeInputStream = is.read(buffer);
-                Log.d("readSizeInputStream:",String.valueOf(readSizeInputStream));
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                json = new String(buffer, UTF_8);
-            }
-        } catch (Exception ex) {
-            Log.d("Exception", ex.toString());
-            return null;
-        }
-        return json;
-    }
 }
