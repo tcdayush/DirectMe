@@ -3,6 +3,7 @@ package com.example.directme;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -12,17 +13,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-class SendPostRequest extends AsyncTask<String, Void, String> {
+class SendRouteRequestToServer extends AsyncTask<String, Void, String> {
 
+    private String postData = "";
     private ProgressDialog pDialog;
     @SuppressLint("StaticFieldLeak")
     private Context mContext;
 
-    SendPostRequest(Context context) {
+    SendRouteRequestToServer(Context context) {
         this.mContext = context;
     }
 
@@ -41,7 +44,6 @@ class SendPostRequest extends AsyncTask<String, Void, String> {
     @Override
     public String doInBackground(String... params) {
 
-        String postData = "";
         HttpURLConnection httpConnection = null;
 
         try {
@@ -49,7 +51,14 @@ class SendPostRequest extends AsyncTask<String, Void, String> {
             httpConnection = (HttpURLConnection) new URL(params[0]).openConnection();
             httpConnection.setRequestMethod("POST");
             httpConnection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+            httpConnection.setRequestProperty("Accept", "application/json");
+
+            httpConnection.setDoInput(true);
             httpConnection.setDoOutput(true);
+
+            OutputStream os = httpConnection.getOutputStream();
+            os.write(params[1].getBytes());
+            os.flush();
 
             // handle error response code it occurs
             int responseCode = httpConnection.getResponseCode();
@@ -90,8 +99,12 @@ class SendPostRequest extends AsyncTask<String, Void, String> {
         if (result != null) {
             try {
                 writeToFile(result, mContext);
+                Intent intent = new Intent(mContext, Routes.class);
+                mContext.startActivity(intent);
+                Log.d("onPostExecute: Success ", result);
+
             } catch (Exception e) {
-                Log.d("onPostExecute: ", e.toString());
+                Log.d("onPostExecute: Failed", e.toString());
             }
         }
         pDialog.dismiss();
@@ -100,14 +113,13 @@ class SendPostRequest extends AsyncTask<String, Void, String> {
     @SuppressLint("NewApi")
     private void writeToFile(String data, Context context) {
 
-        try ( OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("Routes.json", Context.MODE_PRIVATE))) {
+        try (OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("sampleCombinedRoutes.json", Context.MODE_PRIVATE))) {
             outputStreamWriter.write(data);
         } catch (Exception e) {
             Log.d("writeToFile", e.toString());
         }
 
     }
-
 }
 
 

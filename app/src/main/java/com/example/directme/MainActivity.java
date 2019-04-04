@@ -22,10 +22,10 @@ import com.google.android.gms.tasks.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
+import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.NoSuchFileException;
 
 /**
  * Launcher Activity: This activity will launch whenever the app starts
@@ -95,41 +95,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    protected void pushUserDetailsToServer(GoogleSignInAccount account, File file)
+    protected void pushUserDetailsToServer(GoogleSignInAccount account)
     {
         try
         {
-            String personId = account.getId();
-            String personName = account.getGivenName();
-            String personMail = account.getEmail();
+            String googleId = account.getId();
+            String name = account.getGivenName();
+            String emailId = account.getEmail();
 
             MainActivity mainActivity = new MainActivity();
-            JSONObject  jsonObject = mainActivity.makeJSONObject(personId,personName, personMail);
+            JSONObject  jsonObject = mainActivity.makeJSONObject(googleId, name, emailId);
 
-            try (Writer output = new BufferedWriter(new FileWriter(file)))
-            {
-                output.write(jsonObject.toString());
-                //TODO: Send data to Database. //new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
-            }
+            new SendUserLoginRequestToServer(MainActivity.this).execute("http://10.6.57.183:8185/addNewUser/"
+                    , jsonObject.toString());
+            Log.d("User:",jsonObject.toString());
         }
         catch (Exception e)
         {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
-
     }
 
     private void updateUI(GoogleSignInAccount account) {
         // If account returns value, continue with next activity
         if(account!=null)
         {
-            File directory = getFilesDir();
-            File file = new File(directory,"Userdata_" + account.getId() + ".json");
-            if(!file.exists() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                pushUserDetailsToServer(account,file);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                pushUserDetailsToServer(account);
             }
             Intent intent = new Intent(MainActivity.this, MapsActivity.class);
             startActivity(intent);
+
         }
         // If account returns null -> Show Sign in Page
         if(account==null)
@@ -161,13 +157,13 @@ public class MainActivity extends AppCompatActivity {
             updateUI(null);
         }
     }
-    private JSONObject makeJSONObject(String personId, String personName, String personMail)
-    {
+
+    private JSONObject makeJSONObject(String googleId, String name, String emailId) {
         JSONObject obj = new JSONObject() ;
         try {
-            obj.put("personId", personId);
-            obj.put("personName", personName);
-            obj.put("personMail", personMail);
+            obj.put("googleId", googleId);
+            obj.put("name", name);
+            obj.put("emailId", emailId);
         } catch (JSONException e) {
                 Log.d("JSONException", e.toString());
         }
@@ -176,12 +172,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-
         File file = new File(getFilesDir(),"sampleCombinedRoutes.json");
         if(file.exists()){
-            file.delete();
+            boolean fileDeleteStatus = file.delete();
+            Log.d(TAG,"fileDeleteStatus: " + fileDeleteStatus);
         }
-
         super.onDestroy();
     }
 }

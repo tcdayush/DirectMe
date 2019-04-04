@@ -15,8 +15,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -38,13 +43,11 @@ public class Routes extends Activity {
         ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, stringArrayList);
         listView.setAdapter(stringArrayAdapter);
 
-        //TODO: Delete the file after closing the app
-
         try
         {
             JSONObject obj = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                obj = new JSONObject(new MapsActivity().readJSONFromDirectory());
+                obj = new JSONObject(readJSONFromDirectory());
             }
 
             assert obj != null;
@@ -97,7 +100,29 @@ public class Routes extends Activity {
                 ActivityCompat.startActivityForResult(Routes.this, new Intent(Routes.this, MapsActivity.class), 0, null);
             }
         });
-
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public String readJSONFromDirectory() {
+        String json = null;
+        String filePath = getFilesDir().getPath();
+        File oriFile = new File(this.getFilesDir(), "sampleCombinedRoutes.json");
+        Toast.makeText(getApplicationContext(),filePath,Toast.LENGTH_LONG).show();
+        try {
+            byte[] buffer;
+            try (InputStream is = new FileInputStream(oriFile) ) {
+                int size = is.available();
+                buffer = new byte[size];
+                int readSizeInputStream = is.read(buffer);
+                Log.d("readSizeInputStream:",String.valueOf(readSizeInputStream));
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                json = new String(buffer, UTF_8);
+            }
+        } catch (Exception ex) {
+            Log.d("Exception", ex.toString());
+            return null;
+        }
+        return json;
+    }
 }

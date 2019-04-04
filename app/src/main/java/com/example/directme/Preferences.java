@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 public class Preferences extends Activity {
 
@@ -26,7 +27,7 @@ public class Preferences extends Activity {
     private CheckBox weather;
     private CheckBox reliability;
     private CheckBox comfort;
-    private CheckBox trafficAvoidance;
+    private CheckBox avoidTraffic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public class Preferences extends Activity {
         weather = (findViewById(R.id.checkbox_weather));
         reliability = (findViewById(R.id.checkbox_reliability));
         comfort = (findViewById(R.id.checkbox_comfort));
-        trafficAvoidance = (findViewById(R.id.checkbox_traffic_congestion));
+        avoidTraffic = (findViewById(R.id.checkbox_traffic_congestion));
 
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(Preferences.this);
         assert account != null;
@@ -56,7 +57,10 @@ public class Preferences extends Activity {
                  @Override
                  public void onClick(View v) {
 
-                     JSONObject  jsonObject = makeJSONObject(pollutionAvoidance.isChecked(),weather.isChecked(),reliability.isChecked(),comfort.isChecked(),trafficAvoidance.isChecked());
+                     GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+                     String personId = Objects.requireNonNull(account).getId();
+
+                     JSONObject  jsonObject = makeJSONObject(personId,pollutionAvoidance.isChecked(),weather.isChecked(),reliability.isChecked(),comfort.isChecked(),avoidTraffic.isChecked());
 
                      try {
                          File directory = getFilesDir();
@@ -65,10 +69,9 @@ public class Preferences extends Activity {
                              output.write(jsonObject.toString());
                          }
 
-                         //TODO: Send Database to server (Based on specification)
-                         //new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
+                         new SendUserPreferencesRequestToServer(Preferences.this).execute("http://10.6.57.183:8185/updatePreference/"
+                                 , jsonObject.toString());
 
-                         Toast.makeText(getApplicationContext(), "Preferences saved" , Toast.LENGTH_LONG).show();
                          Intent intent = new Intent(Preferences.this, MapsActivity.class);
                          startActivity(intent);
 
@@ -80,15 +83,16 @@ public class Preferences extends Activity {
         }
     }
 
-    private JSONObject makeJSONObject(Boolean pollutionAvoidance, Boolean weather, Boolean reliability, Boolean comfort, Boolean trafficAvoidance)
+    private JSONObject makeJSONObject(String googleId, Boolean pollutionAvoidance, Boolean weather, Boolean reliability, Boolean comfort, Boolean avoidTraffic)
     {
         JSONObject obj = new JSONObject() ;
         try {
+            obj.put("googleId",googleId);
             obj.put("pollutionAvoidance", pollutionAvoidance);
             obj.put("weather", weather);
             obj.put("reliability", reliability);
             obj.put("comfort", comfort);
-            obj.put("trafficAvoidance", trafficAvoidance);
+            obj.put("avoidTraffic", avoidTraffic);
         } catch (JSONException e) {
             Log.d("JSONException", e.toString());
         }
@@ -110,7 +114,7 @@ public class Preferences extends Activity {
                 weather.setChecked(jsonObject.getBoolean("weather"));
                 reliability.setChecked(jsonObject.getBoolean("reliability"));
                 comfort.setChecked(jsonObject.getBoolean("comfort"));
-                trafficAvoidance.setChecked(jsonObject.getBoolean("trafficAvoidance"));
+                avoidTraffic.setChecked(jsonObject.getBoolean("avoidTraffic"));
 
                 Toast.makeText(getApplicationContext(), "Preferences Loaded" , Toast.LENGTH_SHORT).show();
             }

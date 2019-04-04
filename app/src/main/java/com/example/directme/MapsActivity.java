@@ -34,6 +34,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -54,6 +55,7 @@ import com.google.maps.android.PolyUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -73,6 +75,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
         Marker sourceMarker;
         Marker destinationMarker;
+        String sourcePlaceName = null;
+        String destinationPlaceName = null;
         private static final String TAG = MapsActivity.class.getSimpleName();
         private GoogleMap mMap;
         protected CameraPosition mCameraPosition;
@@ -170,9 +174,12 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
                     if(sourceMarker != null) {
                         sourceMarker.remove();
+                        sourcePlaceName =null;
+                        sourceLatlangObj = null;
                     }
 
                     Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                    sourcePlaceName = place.getName();
                     sourceLatlangObj = place.getLatLng();
                     assert sourceLatlangObj != null;
                     Log.v("latitude:", "" + sourceLatlangObj.latitude);
@@ -196,10 +203,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
                     if(destinationMarker != null) {
                         destinationMarker.remove();
+                        destinationPlaceName =null;
+                        destinationLatlangObj = null;
                     }
 
                     Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
                     destinationLatlangObj = place.getLatLng();
+                    destinationPlaceName = place.getName();
                     assert destinationLatlangObj != null;
                     Log.v("latitude:", "" + destinationLatlangObj.latitude);
                     Log.v("longitude:", "" + destinationLatlangObj.longitude);
@@ -208,7 +218,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
                             .title("Destination: " + place.getName()));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(destinationLatlangObj));
                 }
-
                 @Override
                 public void onError(@NonNull Status status) {
                     Log.i(TAG, "An error occurred: " + status);
@@ -219,25 +228,27 @@ import static java.nio.charset.StandardCharsets.UTF_8;
                 @Override
                 public void onClick(View v) {
 
-                    try {
-                        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-                        String personId = Objects.requireNonNull(account).getId();
+                    if(sourcePlaceName !=null && destinationPlaceName != null){
+                        try {
+                            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+                            String personId = Objects.requireNonNull(account).getId();
 
-                        new SendPostRequest(MapsActivity.this).execute("http://10.6.57.183:9092/firstSearch/" +
-                                        personId + "/" +
-                                sourceLatlangObj.latitude + "/" +
-                                sourceLatlangObj.longitude + "/" +
-                                destinationLatlangObj.latitude + "/" +
-                                destinationLatlangObj.longitude + "/"
-                                , "");
+                                new SendRouteRequestToServer(MapsActivity.this).execute("http://10.6.57.183:9092/firstSearch/" +
+                                                personId + "/" +
+                                                sourceLatlangObj.latitude + "/" +
+                                                sourceLatlangObj.longitude + "/" +
+                                                destinationLatlangObj.latitude + "/" +
+                                                destinationLatlangObj.longitude + "/"
+                                        , "");
 
-                    } catch (Exception e) {
-                        Log.d("buttonSearch",e.toString());
+                        } catch (Exception e) {
+                            Log.d("buttonSearch",e.toString());
+                        }
                     }
-                    // Start the below intent after previous steps
-                    Intent intent = new Intent(MapsActivity.this, Routes.class);
-                    startActivity(intent);
-
+                    else{
+                        Toast.makeText(getApplicationContext(),"Enter Source and Destination Correctly ",
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
             });
 
@@ -573,14 +584,15 @@ import static java.nio.charset.StandardCharsets.UTF_8;
         super.onStart();
     }
 
-    //TODO: Code duplication with Routes.java. Refactoring required @AyushM
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public String readJSONFromDirectory() {
         String json = null;
-        String filePath = getFilesDir().getAbsolutePath();
+        String filePath = getFilesDir().getPath();
+        File oriFile = new File(this.getFilesDir(), "sampleCombinedRoutes.json");
+        Toast.makeText(getApplicationContext(),filePath,Toast.LENGTH_LONG).show();
         try {
             byte[] buffer;
-            try (InputStream is = new FileInputStream(filePath+ "sampleCombinedRoutes.json")) {
+            try (InputStream is = new FileInputStream(oriFile)) {
                 int size = is.available();
                 buffer = new byte[size];
                 int readSizeInputStream = is.read(buffer);
