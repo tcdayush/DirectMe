@@ -1,6 +1,5 @@
 package com.example.directme;
 
-
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -23,9 +22,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.NoSuchFileException;
 
 /**
  * Launcher Activity: This activity will launch whenever the app starts
@@ -33,7 +29,7 @@ import java.nio.file.NoSuchFileException;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "My Tag" ;
+    private static final String TAG = "My Tag";
     private static final int RC_SIGN_IN = 1;
 
     @Override
@@ -76,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     default:
-                        Toast.makeText(getApplicationContext(),"Default Switch Case Reached",
+                        Toast.makeText(getApplicationContext(), "Default Switch Case Reached",
                                 Toast.LENGTH_SHORT).show();
                         break;
                 }
@@ -85,8 +81,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
@@ -95,42 +90,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    protected void pushUserDetailsToServer(GoogleSignInAccount account)
-    {
-        try
-        {
+    protected void pushUserDetailsToServer(GoogleSignInAccount account) {
+        try {
             String googleId = account.getId();
             String name = account.getGivenName();
             String emailId = account.getEmail();
 
             MainActivity mainActivity = new MainActivity();
-            JSONObject  jsonObject = mainActivity.makeJSONObject(googleId, name, emailId);
+            JSONObject jsonObject = mainActivity.makeJSONObject(googleId, name, emailId);
 
             new SendUserLoginRequestToServer(MainActivity.this).execute("http://10.6.57.183:8185/addNewUser/"
                     , jsonObject.toString());
-            Log.d("User:",jsonObject.toString());
-        }
-        catch (Exception e)
-        {
+            Log.d("User:", jsonObject.toString());
+        } catch (Exception e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
     private void updateUI(GoogleSignInAccount account) {
         // If account returns value, continue with next activity
-        if(account!=null)
-        {
+        if (account != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 pushUserDetailsToServer(account);
             }
             Intent intent = new Intent(MainActivity.this, MapsActivity.class);
             startActivity(intent);
-
         }
         // If account returns null -> Show Sign in Page
-        if(account==null)
-        {
-            Toast.makeText(getApplicationContext(),"Not Signed In. Please Login",Toast.LENGTH_SHORT).show();
+        if (account == null) {
+            Toast.makeText(getApplicationContext(), "Not Signed In. Please Login", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -159,23 +147,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private JSONObject makeJSONObject(String googleId, String name, String emailId) {
-        JSONObject obj = new JSONObject() ;
+        JSONObject obj = new JSONObject();
         try {
             obj.put("googleId", googleId);
             obj.put("name", name);
             obj.put("emailId", emailId);
         } catch (JSONException e) {
-                Log.d("JSONException", e.toString());
+            Log.d("JSONException", e.toString());
         }
         return obj;
     }
 
     @Override
     protected void onDestroy() {
-        File file = new File(getFilesDir(),"sampleCombinedRoutes.json");
-        if(file.exists()){
+        File file = new File(getFilesDir(), "sampleCombinedRoutes.json");
+        if (file.exists()) {
             boolean fileDeleteStatus = file.delete();
-            Log.d(TAG,"fileDeleteStatus: " + fileDeleteStatus);
+            Log.d(TAG, "fileDeleteStatus: " + fileDeleteStatus);
         }
         super.onDestroy();
     }

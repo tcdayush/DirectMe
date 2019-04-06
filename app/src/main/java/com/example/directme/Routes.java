@@ -43,48 +43,43 @@ public class Routes extends Activity {
         ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, stringArrayList);
         listView.setAdapter(stringArrayAdapter);
 
-        try
-        {
+        try {
             JSONObject obj = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
                 obj = new JSONObject(readJSONFromDirectory());
             }
 
             assert obj != null;
-            JSONArray routesArray=obj.getJSONArray("Routes");
-            for (int i=0;i<routesArray.length();i++){
-                JSONObject routesJSONObject=routesArray.getJSONObject(i);
-                String rank=routesJSONObject.getString("rank");
-                String time=routesJSONObject.getString("time");
-                String distance=routesJSONObject.getString("distance");
+            JSONArray routesArray = obj.getJSONArray("Routes");
+            for (int i = 0; i < routesArray.length(); i++) {
+                JSONObject routesJSONObject = routesArray.getJSONObject(i);
+                String rank = routesJSONObject.getString("rank");
+                String time = routesJSONObject.getString("time");
+                String distance = routesJSONObject.getString("distance");
                 JSONArray modesArray = routesJSONObject.getJSONArray("modes");
                 String type = "SOURCE -->  ";
 
-                for (int j=0;j<modesArray.length();j++) {
+                for (int j = 0; j < modesArray.length(); j++) {
                     JSONObject modesJSONObject = modesArray.getJSONObject(j);
                     type += modesJSONObject.getString("type") + "  -->  ";
                 }
 
                 type += "DESTINATION";
 
-
                 stringArrayList.add(
                         rank + ".  "
-                        + type + "\n"
-                        + "Time: " + Integer.parseInt(time)/60 + " Minutes \n"
-                        + "Distance: " + Float.parseFloat(distance)/1000 + "Kms"
+                                + type + "\n"
+                                + "Time: " + Integer.parseInt(time) / 60 + " Minutes \n"
+                                + "Distance: " + Float.parseFloat(distance) / 1000 + "Kms"
 
                 );
                 stringArrayAdapter.notifyDataSetChanged();
             }
-
-
-
-    }catch (Exception e){
+        } catch (Exception e) {
             Log.d("Exception", e.toString());
         }
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @SuppressLint("ApplySharedPref")
             public void onItemClick(AdapterView<?> l, View v, int position, long id) {
                 Log.i("HelloListView", "You clicked Item: " + id + " at position:" + position);
@@ -107,14 +102,14 @@ public class Routes extends Activity {
         String json = null;
         String filePath = getFilesDir().getPath();
         File oriFile = new File(this.getFilesDir(), "sampleCombinedRoutes.json");
-        Toast.makeText(getApplicationContext(),filePath,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), filePath, Toast.LENGTH_LONG).show();
         try {
             byte[] buffer;
-            try (InputStream is = new FileInputStream(oriFile) ) {
+            try (InputStream is = new FileInputStream(oriFile)) {
                 int size = is.available();
                 buffer = new byte[size];
                 int readSizeInputStream = is.read(buffer);
-                Log.d("readSizeInputStream:",String.valueOf(readSizeInputStream));
+                Log.d("readSizeInputStream:", String.valueOf(readSizeInputStream));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 json = new String(buffer, UTF_8);
