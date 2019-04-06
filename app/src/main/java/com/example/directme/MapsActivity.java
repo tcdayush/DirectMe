@@ -649,6 +649,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
             case "Walking":  lineOptions.color(Color.GREEN); break;
             case "Bus":  lineOptions.color(Color.RED); break;
             case "Bicycling":  lineOptions.color(Color.BLUE); break;
+            case "Heavy Rail":  lineOptions.color(Color.MAGENTA); break;
+            case "Tram":  lineOptions.color(Color.YELLOW); break;
             default: lineOptions.color(Color.GRAY); break;
         }
 
