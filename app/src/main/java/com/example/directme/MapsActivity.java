@@ -592,9 +592,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public String readJSONFromDirectory() {
         String json = null;
-        String filePath = getFilesDir().getPath();
         File oriFile = new File(this.getFilesDir(), "sampleCombinedRoutes.json");
-        Toast.makeText(getApplicationContext(), filePath, Toast.LENGTH_LONG).show();
         try {
             byte[] buffer;
             try (InputStream is = new FileInputStream(oriFile)) {

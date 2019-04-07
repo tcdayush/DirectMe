@@ -20,7 +20,7 @@ import java.net.URL;
 
 class SendRouteRequestToServer extends AsyncTask<String, Void, String> {
 
-    private String postData = "";
+    private String postData = null;
     private ProgressDialog pDialog;
     @SuppressLint("StaticFieldLeak")
     private Context mContext;
