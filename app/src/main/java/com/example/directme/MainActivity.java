@@ -1,6 +1,5 @@
 package com.example.directme;
 
-
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -22,10 +21,7 @@ import com.google.android.gms.tasks.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
 
 /**
  * Launcher Activity: This activity will launch whenever the app starts
@@ -33,7 +29,7 @@ import java.io.Writer;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "My Tag" ;
+    private static final String TAG = "My Tag";
     private static final int RC_SIGN_IN = 1;
 
     @Override
@@ -64,35 +60,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         //listener to the sign in button
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
+
                     case R.id.sign_in:
                         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                         startActivityForResult(signInIntent, RC_SIGN_IN);
                         break;
 
                     default:
-                        Toast.makeText(getApplicationContext(),"Default Switch Case Reached",
+                        Toast.makeText(getApplicationContext(), "Default Switch Case Reached",
                                 Toast.LENGTH_SHORT).show();
                         break;
-
-
                 }
             }
         });
-
-
-
-
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
@@ -101,51 +90,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    protected void pushUserDetailsToServer(GoogleSignInAccount account, File file)
-    {
-        try
-        {
-        String personId = account.getId();
-        String personName = account.getGivenName();
-        String personMail = account.getEmail();
+    protected void pushUserDetailsToServer(GoogleSignInAccount account) {
+        try {
+            String googleId = account.getId();
+            String name = account.getGivenName();
+            String emailId = account.getEmail();
 
-        MainActivity mainActivity = new MainActivity();
-        JSONObject  jsonObject = mainActivity.makeJSONObject(personId,personName, personMail);
+            MainActivity mainActivity = new MainActivity();
+            JSONObject jsonObject = mainActivity.makeJSONObject(googleId, name, emailId);
 
-
-            try (Writer output = new BufferedWriter(new FileWriter(file)))
-            {
-                output.write(jsonObject.toString());
-
-                //TODO: Send data to Database. //new SendPostRequest().execute("http://10.6.57.183:9090/pref", jsonObject.toString());
-            }
-        }
-        catch (Exception e)
-        {
+            new SendUserLoginRequestToServer(MainActivity.this).execute("http://10.6.57.183:8185/addNewUser/"
+                    , jsonObject.toString());
+            Log.d("User:", jsonObject.toString());
+        } catch (Exception e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
-
     }
 
     private void updateUI(GoogleSignInAccount account) {
         // If account returns value, continue with next activity
-        if(account!=null)
-        {
-            File directory = getFilesDir();
-            File file = new File(directory,"Userdata_" + account.getId() + ".json");
-            if(!file.exists() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                pushUserDetailsToServer(account,file);
+        if (account != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                pushUserDetailsToServer(account);
             }
             Intent intent = new Intent(MainActivity.this, MapsActivity.class);
             startActivity(intent);
         }
         // If account returns null -> Show Sign in Page
-        if(account==null)
-        {
-            Toast.makeText(getApplicationContext(),"Not Signed In. Please Login",Toast.LENGTH_SHORT).show();
+        if (account == null) {
+            Toast.makeText(getApplicationContext(), "Not Signed In. Please Login", Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
     @Override
@@ -171,16 +145,26 @@ public class MainActivity extends AppCompatActivity {
             updateUI(null);
         }
     }
-    private JSONObject makeJSONObject(String personId, String personName, String personMail)
-    {
-        JSONObject obj = new JSONObject() ;
+
+    private JSONObject makeJSONObject(String googleId, String name, String emailId) {
+        JSONObject obj = new JSONObject();
         try {
-            obj.put("personId", personId);
-            obj.put("personName", personName);
-            obj.put("personMail", personMail);
+            obj.put("googleId", googleId);
+            obj.put("name", name);
+            obj.put("emailId", emailId);
         } catch (JSONException e) {
-                Log.d("JSONException", e.toString());
+            Log.d("JSONException", e.toString());
         }
         return obj;
+    }
+
+    @Override
+    protected void onDestroy() {
+        File file = new File(getFilesDir(), "sampleCombinedRoutes.json");
+        if (file.exists()) {
+            boolean fileDeleteStatus = file.delete();
+            Log.d(TAG, "fileDeleteStatus: " + fileDeleteStatus);
+        }
+        super.onDestroy();
     }
 }

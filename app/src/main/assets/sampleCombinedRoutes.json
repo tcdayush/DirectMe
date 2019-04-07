@@ -57,14 +57,10 @@
     "rank": 1,
     "preferences": [
       {
-        "type": "pollution avoidance",
-        "startLocation": "29"
-      },
-      {
-        "type": "weather",
-        "startLocation": "04d"
+        "pollution avoidance": "29",
+        "weather": "Cloudy"
       }
-    ]
+      ]
   },
   {
     "modes": [
@@ -122,16 +118,10 @@
     "distance": 2000,
     "time": 2971,
     "rank": 2,
-    "preferences": [
-      {
-        "type": "pollution avoidance",
-        "startLocation": "29"
-      },
-      {
-        "type": "weather",
-        "startLocation": "04d"
-      }
-    ]
+    "preferences": {
+      "pollution avoidance": "29",
+      "weather": "Cloudy"
+    }
   },
   {
     "modes": [
@@ -189,16 +179,10 @@
     "distance": 2000,
     "time": 2971,
     "rank": 3,
-    "preferences": [
-      {
-        "type": "pollution avoidance",
-        "startLocation": "29"
-      },
-      {
-        "type": "weather",
-        "startLocation": "04d"
-      }
-    ]
+    "preferences": {
+      "pollution avoidance": "29",
+      "weather": "Cloudy"
+    }
   }
   ]
 }

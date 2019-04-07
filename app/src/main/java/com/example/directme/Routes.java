@@ -15,8 +15,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -38,50 +43,54 @@ public class Routes extends Activity {
         ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, stringArrayList);
         listView.setAdapter(stringArrayAdapter);
 
-        //TODO: Delete the file after closing the app
-
-        try
-        {
+        try {
             JSONObject obj = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                obj = new JSONObject(readJSONFromAsset());
+                obj = new JSONObject(readJSONFromDirectory());
             }
 
             assert obj != null;
-            JSONArray routesArray=obj.getJSONArray("Routes");
-            for (int i=0;i<routesArray.length();i++){
-                JSONObject routesJSONObject=routesArray.getJSONObject(i);
-                String rank=routesJSONObject.getString("rank");
-                String time=routesJSONObject.getString("time");
-                String distance=routesJSONObject.getString("distance");
+            JSONArray routesArray = obj.getJSONArray("Routes");
+            for (int i = 0; i < routesArray.length(); i++) {
+                JSONObject routesJSONObject = routesArray.getJSONObject(i);
+                String rank = routesJSONObject.getString("rank");
+                String time = routesJSONObject.getString("time");
+                String distance = routesJSONObject.getString("distance");
                 JSONArray modesArray = routesJSONObject.getJSONArray("modes");
+                JSONObject preferencesArray = routesJSONObject.getJSONObject("preferences");
+                String pollutionAvoidanceValue = preferencesArray.getString("pollution avoidance");
+                String weatherValue = preferencesArray.getString("weather");
+
                 String type = "SOURCE -->  ";
 
-                for (int j=0;j<modesArray.length();j++) {
+                for (int j = 0; j < modesArray.length(); j++) {
                     JSONObject modesJSONObject = modesArray.getJSONObject(j);
                     type += modesJSONObject.getString("type") + "  -->  ";
                 }
 
                 type += "DESTINATION";
 
+                String displayString = type + "\n"
+                        + "Time: " + Integer.parseInt(time) / 60 + " Minutes \n"
+                        + "Distance: " + Float.parseFloat(distance) / 1000 + "Kms \n";
 
-                stringArrayList.add(
-                        rank + ".  "
-                        + type + "\n"
-                        + "Time: " + Integer.parseInt(time)/60 + " Minutes \n"
-                        + "Distance: " + Float.parseFloat(distance)/1000 + "Kms"
+                if(Integer.parseInt(pollutionAvoidanceValue) != 0 )
+                {
+                    displayString += "Air Quality Index: " + Integer.parseInt(pollutionAvoidanceValue) + "\n";
+                }
 
-                );
+                if(!weatherValue.equals("")){
+                    displayString += "Weather Type: " + weatherValue;
+                }
+
+                stringArrayList.add("\n" + rank + ".  " + displayString);
                 stringArrayAdapter.notifyDataSetChanged();
             }
-
-
-
-    }catch (Exception e){
+        } catch (Exception e) {
             Log.d("Exception", e.toString());
         }
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @SuppressLint("ApplySharedPref")
             public void onItemClick(AdapterView<?> l, View v, int position, long id) {
                 Log.i("HelloListView", "You clicked Item: " + id + " at position:" + position);
@@ -97,19 +106,20 @@ public class Routes extends Activity {
                 ActivityCompat.startActivityForResult(Routes.this, new Intent(Routes.this, MapsActivity.class), 0, null);
             }
         });
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public String readJSONFromAsset() {
+    public String readJSONFromDirectory() {
         String json = null;
+        File oriFile = new File(this.getFilesDir(), "sampleCombinedRoutes.json");
+
         try {
             byte[] buffer;
-            try (InputStream is = getAssets().open("sampleCombinedRoutes.json")) {
+            try (InputStream is = new FileInputStream(oriFile)) {
                 int size = is.available();
                 buffer = new byte[size];
                 int readSizeInputStream = is.read(buffer);
-                Log.d("readSizeInputStream:",String.valueOf(readSizeInputStream));
+                Log.d("readSizeInputStream:", String.valueOf(readSizeInputStream));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 json = new String(buffer, UTF_8);
