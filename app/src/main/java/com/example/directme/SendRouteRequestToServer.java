@@ -95,7 +95,7 @@ class SendRouteRequestToServer extends AsyncTask<String, Void, String> {
 
     @Override
     public void onPostExecute(String result) {
-        super.onPostExecute(result);
+        /*super.onPostExecute(result);*/
         if (result != null) {
             try {
                 writeToFile(result, mContext);
