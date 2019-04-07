@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -96,16 +97,22 @@ class SendRouteRequestToServer extends AsyncTask<String, Void, String> {
     @Override
     public void onPostExecute(String result) {
         super.onPostExecute(result);
-        if (result != null) {
+        if(result.equals("{\"Routes\":[]}"))
+        {
+            Toast.makeText(mContext,"Routes Not Available for this selection",Toast.LENGTH_LONG).show();
+        }
+        else if (!result.isEmpty()) {
             try {
                 writeToFile(result, mContext);
                 Intent intent = new Intent(mContext, Routes.class);
                 mContext.startActivity(intent);
                 Log.d("onPostExecute: Success ", result);
-
             } catch (Exception e) {
                 Log.d("onPostExecute: Failed", e.toString());
             }
+        }
+        else{
+            Toast.makeText(mContext,"Server not available",Toast.LENGTH_LONG).show();
         }
         pDialog.dismiss();
     }
