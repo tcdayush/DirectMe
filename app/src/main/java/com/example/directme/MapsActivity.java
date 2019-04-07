@@ -658,10 +658,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 lineOptions.color(Color.BLUE);
                 break;
             case "HEAVY_RAIL":
-                lineOptions.color(Color.MAGENTA);
+                lineOptions.color(Color.BLACK);
                 break;
             case "TRAM":
-                lineOptions.color(Color.YELLOW);
+                lineOptions.color(Color.MAGENTA);
                 break;
             default:
                 lineOptions.color(Color.GRAY);

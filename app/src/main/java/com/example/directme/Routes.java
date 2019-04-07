@@ -57,6 +57,10 @@ public class Routes extends Activity {
                 String time = routesJSONObject.getString("time");
                 String distance = routesJSONObject.getString("distance");
                 JSONArray modesArray = routesJSONObject.getJSONArray("modes");
+                JSONObject preferencesArray = routesJSONObject.getJSONObject("preferences");
+                String pollutionAvoidanceValue = preferencesArray.getString("pollution avoidance");
+                String weatherValue = preferencesArray.getString("weather");
+
                 String type = "SOURCE -->  ";
 
                 for (int j = 0; j < modesArray.length(); j++) {
@@ -66,13 +70,20 @@ public class Routes extends Activity {
 
                 type += "DESTINATION";
 
-                stringArrayList.add(
-                        rank + ".  "
-                                + type + "\n"
-                                + "Time: " + Integer.parseInt(time) / 60 + " Minutes \n"
-                                + "Distance: " + Float.parseFloat(distance) / 1000 + "Kms"
+                String displayString = type + "\n"
+                        + "Time: " + Integer.parseInt(time) / 60 + " Minutes \n"
+                        + "Distance: " + Float.parseFloat(distance) / 1000 + "Kms \n";
 
-                );
+                if(Integer.parseInt(pollutionAvoidanceValue) != 0 )
+                {
+                    displayString += "Air Quality Index: " + Integer.parseInt(pollutionAvoidanceValue) + "\n";
+                }
+
+                if(!weatherValue.equals("")){
+                    displayString += "Weather Type: " + weatherValue;
+                }
+
+                stringArrayList.add("\n" + rank + ".  " + displayString);
                 stringArrayAdapter.notifyDataSetChanged();
             }
         } catch (Exception e) {
@@ -100,9 +111,8 @@ public class Routes extends Activity {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public String readJSONFromDirectory() {
         String json = null;
-        String filePath = getFilesDir().getPath();
         File oriFile = new File(this.getFilesDir(), "sampleCombinedRoutes.json");
-        Toast.makeText(getApplicationContext(), filePath, Toast.LENGTH_LONG).show();
+
         try {
             byte[] buffer;
             try (InputStream is = new FileInputStream(oriFile)) {
