@@ -99,8 +99,9 @@ public class MainActivity extends AppCompatActivity {
             MainActivity mainActivity = new MainActivity();
             JSONObject jsonObject = mainActivity.makeJSONObject(googleId, name, emailId);
 
-            new SendUserLoginRequestToServer(MainActivity.this).execute("http://10.6.57.183:8185/addNewUser/"
+            new SendUserLoginRequestToServer(MainActivity.this).execute("http://54.194.11.31:80/userinformationmanagementservice/addNewUser/"
                     , jsonObject.toString());
+
             Log.d("User:", jsonObject.toString());
         } catch (Exception e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
