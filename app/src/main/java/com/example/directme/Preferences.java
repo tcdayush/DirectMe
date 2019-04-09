@@ -72,7 +72,7 @@ public class Preferences extends Activity {
                             output.write(jsonObject.toString());
                         }
 
-                        new SendUserPreferencesRequestToServer(Preferences.this).execute("http://10.6.57.183:8185/updatePreference/"
+                        new SendUserPreferencesRequestToServer(Preferences.this).execute("http://54.194.11.31:80/userinformationmanagementservice/updatePreference/"
                                 , jsonObject.toString());
 
                         Intent intent = new Intent(Preferences.this, MapsActivity.class);

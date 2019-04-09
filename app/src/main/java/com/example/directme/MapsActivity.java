@@ -235,7 +235,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
                         String personId = Objects.requireNonNull(account).getId();
 
-                        new SendRouteRequestToServer(MapsActivity.this).execute("http://10.6.57.183:9092/firstSearch/" +
+                        new SendRouteRequestToServer(MapsActivity.this).execute("http://54.194.11.31:80/routerankerserviceservice/firstSearch/" +
                                         personId + "/" +
                                         sourceLatlangObj.latitude + "/" +
                                         sourceLatlangObj.longitude + "/" +
